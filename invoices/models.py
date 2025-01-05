@@ -5,11 +5,15 @@ from django.db import models
 class Client(models.Model):
     name = models.CharField(max_length=255)
     created_at = models.DateTimeField(auto_now_add=True)
+    def __str__(self):
+        return self.name
 
 # Table: Products
 class Product(models.Model):
     name = models.CharField(max_length=255)
     created_at = models.DateTimeField(auto_now_add=True)
+    def __str__(self):
+        return self.name
 
 # Table: Invoices
 # class Invoice(models.Model):
