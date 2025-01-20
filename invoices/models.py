@@ -16,6 +16,9 @@ class Product(models.Model):
         return self.name
 
 # Table: Invoices
-# class Invoice(models.Model):
-#     invoice_number = models.CharField(max_length=50, unique=True)
-#     client = models.ForeignKey(Client, on_delete=models.CASCADE)
+class Invoice(models.Model):
+    invoice_number = models.CharField(max_length=50, unique=True)
+    client = models.CharField(max_length=255)
+    product = models.CharField(max_length=255)
+    def __str__(self):
+        return self.invoice_number
