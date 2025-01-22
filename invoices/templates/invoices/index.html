@@ -1,0 +1,9 @@
+{% if all_invoices %}
+    <ul>
+    {% for invoice in all_invoices %}
+        <li><a href="/invoices/{{ invoice.id }}/">{{ invoice.invoice_number }}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No invoices are available.</p>
+{% endif %}

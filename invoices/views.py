@@ -6,8 +6,11 @@ from .models import Invoice
 # Invoices
 def index(request):
     all_invoices = Invoice.objects.all()
-    output = ", ".join([invoice.invoice_number for invoice in all_invoices])
-    return HttpResponse(output)
+    context = {
+        "all_invoices": all_invoices,
+    }
+    return render(request, "invoices/index.html", context)
+    
 
 # Detail
 def detail(request, invoice_id):
