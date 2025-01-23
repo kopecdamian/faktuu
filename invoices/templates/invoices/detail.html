@@ -1,0 +1,21 @@
+ <!DOCTYPE html>
+ <html lang="en">
+ <head>
+     <meta charset="UTF-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <title>Faktura {{ invoice.invoice_number }}</title>
+     {% load static %}
+     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+     <link rel="stylesheet" href="{% static 'css/detail_view.css' %}">
+ </head>
+ <body>
+     <div class="container">
+         <div class="detail-card">
+             <h1>{{ invoice.invoice_number }}</h1>
+             <p><strong>Klient:</strong> {{ invoice.client }}</p>
+             <p><strong>Produkt:</strong> {{ invoice.product }}</p>
+             <a href="{% url 'invoices:index' %}" class="btn">Powrót do listy</a>
+         </div>
+     </div>
+ </body>
+ </html>

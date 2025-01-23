@@ -1,9 +1,27 @@
-{% if all_invoices %}
-    <ul>
-    {% for invoice in all_invoices %}
-        <li><a href="/invoices/{{ invoice.id }}/">{{ invoice.invoice_number }}</a></li>
-    {% endfor %}
-    </ul>
-{% else %}
-    <p>No invoices are available.</p>
-{% endif %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Faktury sprzedaży</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <div class="container">
+        <h1>Faktury sprzedaży</h1>
+        <div class="grid">
+            {% for invoice in all_invoices %}
+            <div class="card">
+                <h2>{{ invoice.invoice_number }}</h2>
+                <p>Klient: {{ invoice.client }}</p>
+                <p>Produkt: {{ invoice.product }}</p>
+                <a href="{% url 'invoices:detail' invoice.id %}" class="btn">Zobacz szczegóły</a>
+            </div>
+            {% empty %}
+            <p>Brak faktur do wyświetlenia.</p>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>
