@@ -1,4 +1,5 @@
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render
+from django.http import HttpResponse
 from django.http import HttpResponse
 from .models import Invoice
 
@@ -14,7 +15,8 @@ def index(request):
 
 # Detail
 def detail(request, invoice_id):
-    return HttpResponse("Invoice detail page.")
+    invoice = get_object_or_404(Invoice, pk=invoice_id)
+    return render(request, "invoices/detail.html", {"invoice": invoice})
 
 # PDF
 def pdf(request, invoice_id):
