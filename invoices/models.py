@@ -22,3 +22,10 @@ class Invoice(models.Model):
     product = models.CharField(max_length=255)
     def __str__(self):
         return self.invoice_number
+    
+# Table: Highest Invoice Number
+class InvoiceCounter(models.Model):
+    client = models.CharField(max_length=255)
+    highest_number = models.CharField(max_length=50, unique=True)
+    def __str__(self):
+        return f"{self.client}: {self.highest_number}"
