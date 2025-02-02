@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Strona{% endblock %}</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <h1>Faktuu</h1>
+            <ul>
+                <li><a href="{% url 'invoices:index' %}" class="link">Faktury</a></li>
+                <li><a href="{% url 'invoices:forms' %}" class="link">Klienci</a></li>
+                <li><a href="{% url 'invoices:forms' %}" class="link">Produkty</a></li>
+            </ul>
+        </div>
+        <div class="content">
+            {% block content %}{% endblock %}
+        </div>
+    </div>
+    
+</body>
+</html>

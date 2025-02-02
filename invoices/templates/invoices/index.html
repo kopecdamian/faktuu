@@ -1,27 +1,24 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Faktury sprzedaży</title>
-    {% load static %}
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
-</head>
-<body>
-    <div class="container">
+{% extends 'base.html' %}
+
+{% block title %}Faktury Sprzedazy{% endblock %}
+
+{% block content %}
+    <div class="header">
         <h1>Faktury sprzedaży</h1>
-        <div class="grid">
-            {% for invoice in all_invoices %}
-            <div class="card">
-                <h2>{{ invoice.invoice_number }}</h2>
-                <p>Klient: {{ invoice.client }}</p>
-                <p>Produkt: {{ invoice.product }}</p>
-                <a href="{% url 'invoices:detail' invoice.id %}" class="btn">Zobacz szczegóły</a>
-            </div>
-            {% empty %}
-            <p>Brak faktur do wyświetlenia.</p>
-            {% endfor %}
-        </div>
+        <a href="{% url 'invoices:forms' %}" class="btn">Dodaj Fakturę Sprzedaży</a>
     </div>
-</body>
-</html>
+
+    <div class="grid">
+        {% for invoice in all_invoices %}
+        <div class="card">
+            <h2>{{ invoice.invoice_number }}</h2>
+            <p>Klient: {{ invoice.client }}</p>
+            <p>Produkt: {{ invoice.product }}</p>
+            <a href="{% url 'invoices:detail' invoice.id %}" class="btn">Zobacz szczegóły</a>
+        </div>
+        {% empty %}
+        <p>Brak faktur do wyświetlenia.</p>
+        {% endfor %}
+    </div>
+{% endblock %}
+        
