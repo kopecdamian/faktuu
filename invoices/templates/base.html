@@ -13,11 +13,15 @@
             <h1>Faktuu</h1>
             <ul>
                 <li><a href="{% url 'invoices:index' %}" class="link">Faktury</a></li>
-                <li><a href="{% url 'invoices:forms' %}" class="link">Klienci</a></li>
+                <li><a href="{% url 'invoices:clients' %}" class="link">Klienci</a></li>
                 <li><a href="{% url 'invoices:forms' %}" class="link">Produkty</a></li>
             </ul>
         </div>
         <div class="content">
+            <div class="header">
+                <h1>{% block titlePage %}Strona{% endblock %}</h1>
+                {% block button %}{% endblock %}
+            </div>
             {% block content %}{% endblock %}
         </div>
     </div>

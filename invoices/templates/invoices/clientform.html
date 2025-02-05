@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block title %}Dodaj Klienta{% endblock %}
+
+{% block titlePage %}Dodaj Klienta{% endblock %}
+
+{% block content %}
+    <form action="{% url 'invoices:saveclient' %}" method="post">
+        {% csrf_token %}
+        <fieldset>
+            <label for="clientName">Nazwa Klienta:</label>
+            <input type="text" name="clientName" id="clientName">
+        </fieldset>
+        
+        <div class="button-group">
+            <button type="submit" class="btn btn-primary">Zapisz</button>
+            <a href="{% url 'invoices:clients' %}" class="btn btn-secondary">Anuluj</a>
+        </div>
+    </form>
+{% endblock %}

@@ -1,6 +1,6 @@
 from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponse, HttpResponseRedirect
-from .models import Invoice, InvoiceCounter
+from .models import Invoice, InvoiceCounter, Client
 from django.urls import reverse
 from datetime import datetime
 
@@ -52,3 +52,26 @@ def detail(request, invoice_id):
 # PDF
 def pdf(request, invoice_id):
     return HttpResponse("Invoice download page.")
+
+# clietns
+def clients(request):
+    all_clients = Client.objects.all()
+    context = {
+        "all_clients": all_clients,
+    }
+    return render(request, "invoices/clients.html", context)
+
+# Create New Client
+def clientform(request):
+    return render(request, "invoices/clientform.html")
+
+# Save New Client
+def saveclient(request):
+    if request.method == 'POST':
+
+        clientName = request.POST.get('clientName')
+        
+        Client.objects.create(
+            name = clientName
+        )
+    return HttpResponseRedirect(reverse("invoices:clients"))

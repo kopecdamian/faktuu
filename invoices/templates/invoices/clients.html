@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block title %}Klienci{% endblock %}
+
+{% block titlePage %}Klienci{% endblock %}
+
+{% block button %}<a href="{% url 'invoices:clientform' %}" class="btn">Dodaj Klienta</a>{% endblock %}
+
+{% block content %}
+    <div class="grid">
+        {% for client in all_clients %}
+        <div class="card">
+            <h2>Klient: {{ client.name }}</h2>
+            <a href="{% url 'invoices:detail' client.id %}" class="btn">Zobacz szczegóły</a>
+        </div>
+        {% empty %}
+        <p>Brak klientów do wyświetlenia.</p>
+        {% endfor %}
+    </div>
+{% endblock %}
+        

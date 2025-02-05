@@ -2,12 +2,12 @@
 
 {% block title %}Faktury Sprzedazy{% endblock %}
 
-{% block content %}
-    <div class="header">
-        <h1>Faktury sprzedaży</h1>
-        <a href="{% url 'invoices:forms' %}" class="btn">Dodaj Fakturę Sprzedaży</a>
-    </div>
+{% block titlePage %}Faktury Sprzedazy{% endblock %}
 
+{% block button %}<a href="{% url 'invoices:forms' %}" class="btn">Dodaj Fakturę Sprzedaży</a>{% endblock %}
+
+
+{% block content %}
     <div class="grid">
         {% for invoice in all_invoices %}
         <div class="card">

@@ -64,13 +64,13 @@ body {
     background-color: #555; 
 }
 
-.header2 {
+.header {
     width: 100%;
     display: flex; 
     justify-content: space-between; 
     align-items: center; 
     padding: 10px 20px;
-    background-color: #f0f0f0;
+    background-color: #fff;
 }
 
 h1 {
