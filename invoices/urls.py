@@ -13,5 +13,12 @@ urlpatterns = [
     # /invoice/5
     path("invoices/<int:invoice_id>/", views.detail, name="detail"),
     # /invoice/5/pdf
-    path("invoices/<int:invoice_id>/pdf/", views.pdf, name="products")
+    path("invoices/<int:invoice_id>/pdf/", views.pdf, name="products"),
+
+    # /invoice/clients
+    path("invoices/clients", views.clients, name="clients"),
+     # /invoice/clients/create
+    path("invoices/clients/create", views.clientform, name="clientform"),
+      # /invoice/clients/save
+    path("invoices/clients/save", views.saveclient, name="saveclient")
 ]
