@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block title %}{{product.name}}{% endblock %}
+
+{% block titlePage %}{{product.name}}{% endblock %}
+
+{% block content %}
+    <div class="detail-card">
+        <h1><strong>Nazwa Produktu:</strong> {{ product.name }}</h1>
+        <a href="{% url 'invoices:products' %}" class="btn">Powrót do listy</a>
+    </div>
+{% endblock %}

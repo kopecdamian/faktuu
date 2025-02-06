@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block title %}{{client.name}}{% endblock %}
+
+{% block titlePage %}{{client.name}}{% endblock %}
+
+{% block content %}
+    <div class="detail-card">
+        <h1><strong>Nazwa Klienta:</strong> {{ client.name }}</h1>
+        <a href="{% url 'invoices:clients' %}" class="btn">Powrót do listy</a>
+    </div>
+{% endblock %}

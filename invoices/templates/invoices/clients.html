@@ -11,7 +11,7 @@
         {% for client in all_clients %}
         <div class="card">
             <h2>Klient: {{ client.name }}</h2>
-            <a href="{% url 'invoices:detail' client.id %}" class="btn">Zobacz szczegóły</a>
+            <a href="{% url 'invoices:clientDetail' client.id %}" class="btn">Zobacz szczegóły</a>
         </div>
         {% empty %}
         <p>Brak klientów do wyświetlenia.</p>
