@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block title %}Produkty{% endblock %}
+
+{% block titlePage %}Produkty{% endblock %}
+
+{% block button %}<a href="{% url 'invoices:productForm' %}" class="btn">Dodaj Produkt</a>{% endblock %}
+
+{% block content %}
+    <div class="grid">
+        {% for product in all_products %}
+        <div class="card">
+            <h2>Produkt: {{ product.name }}</h2>
+            <a href="{% url 'invoices:productDetail' product.id %}" class="btn">Zobacz szczegóły</a>
+        </div>
+        {% empty %}
+        <p>Brak produktów do wyświetlenia.</p>
+        {% endfor %}
+    </div>
+{% endblock %}
+        

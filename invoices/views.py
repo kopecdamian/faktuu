@@ -1,6 +1,6 @@
 from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponse, HttpResponseRedirect
-from .models import Invoice, InvoiceCounter, Client
+from .models import Invoice, InvoiceCounter, Client, Product
 from django.urls import reverse
 from datetime import datetime
 
@@ -75,3 +75,36 @@ def saveclient(request):
             name = clientName
         )
     return HttpResponseRedirect(reverse("invoices:clients"))
+
+# Client Detail
+def clientDetail(request, client_id):
+    client = get_object_or_404(Client, pk=client_id)
+    return render(request, "invoices/clientDetail.html", {"client": client})
+
+# Products
+def products(request):
+    all_products = Product.objects.all()
+    context = {
+        "all_products": all_products,
+    }
+    return render(request, "invoices/products.html", context)
+
+# Create New Product
+def productForm(request):
+    return render(request, "invoices/productForm.html")
+
+# Save New Product
+def productSave(request):
+    if request.method == 'POST':
+
+        productName = request.POST.get('productName')
+        
+        Product.objects.create(
+            name = productName
+        )
+    return HttpResponseRedirect(reverse("invoices:products"))
+
+# Product Detail
+def productDetail(request, product_id):
+    product = get_object_or_404(Client, pk=product_id)
+    return render(request, "invoices/productDetail.html", {"product": product})

@@ -20,5 +20,16 @@ urlpatterns = [
      # /invoice/clients/create
     path("invoices/clients/create", views.clientform, name="clientform"),
       # /invoice/clients/save
-    path("invoices/clients/save", views.saveclient, name="saveclient")
+    path("invoices/clients/save", views.saveclient, name="saveclient"),
+    # /invoice/clients/5
+    path("invoices/clients/<int:client_id>/", views.clientDetail, name="clientDetail"),
+
+      # /invoice/products
+    path("invoices/products", views.products, name="products"),
+     # /invoice/products/create
+    path("invoices/products/create", views.productForm, name="productForm"),
+      # /invoice/products/save
+    path("invoices/products/save", views.productSave, name="productSave"),
+    # /invoice/products/5
+    path("invoices/products/<int:product_id>/", views.productDetail, name="productDetail"),
 ]
