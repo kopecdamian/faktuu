@@ -15,7 +15,11 @@ def index(request):
     
 # Create invoice
 def forms(request):
-    return render(request, "invoices/forms.html")
+    all_clients = Client.objects.all()
+    context = {
+        "all_clients": all_clients,
+    }
+    return render(request, "invoices/forms.html", context)
 
 # Save invoice
 def save(request):
@@ -39,7 +43,7 @@ def save(request):
         
         Invoice.objects.create(
             invoice_number = new_invoice_number,
-            client = client,
+            client = Client.objects.get(id=client),
             product = product
         )
     return HttpResponseRedirect(reverse("invoices:index"))
@@ -70,9 +74,23 @@ def saveclient(request):
     if request.method == 'POST':
 
         clientName = request.POST.get('clientName')
+        nipNumber = request.POST.get('nipNumber')
+        adress = request.POST.get('adress')
+        city = request.POST.get('city')
+        postalCode = request.POST.get('postalCode')
+        country = request.POST.get('country')
+        phoneNumber = request.POST.get('phoneNumber')
+        email = request.POST.get('email')
         
         Client.objects.create(
-            name = clientName
+            name = clientName,
+            nip_number = nipNumber,
+            street = adress,
+            city = city,
+            postal_code = postalCode,
+            country = country,
+            phone_number = phoneNumber,
+            email = email
         )
     return HttpResponseRedirect(reverse("invoices:clients"))
 

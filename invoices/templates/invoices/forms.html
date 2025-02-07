@@ -12,7 +12,12 @@
         {% csrf_token %}
         <fieldset>
             <label for="client">Klient</label>
-            <input type="text" name="client" id="client">
+            <select name="client" id="client">
+                <option value="" selected>-- Wybierz klienta --</option>
+                {% for client in all_clients %}
+                    <option value="{{ client.id }}">{{ client.name }}</option>
+                {% endfor %}
+            </select>
 
             <label for="product">Produkt</label>
             <input type="text" name="product" id="product">
