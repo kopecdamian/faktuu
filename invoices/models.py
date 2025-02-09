@@ -18,6 +18,14 @@ class Client(models.Model):
 # Table: Products
 class Product(models.Model):
     name = models.CharField(max_length=255)
+    price_netto = models.DecimalField(max_digits=10, decimal_places=2)
+    vat_rate = models.IntegerField(
+        default=23,
+        validators=[
+            MaxValueValidator(100),
+            MinValueValidator(0)
+        ])
+    price_brutto = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     def __str__(self):
         return self.name
@@ -30,6 +38,7 @@ class Invoice(models.Model):
         on_delete=models.CASCADE
     )
     product = models.CharField(max_length=255)
+    created_at = models.DateTimeField(auto_now_add=True)
     def __str__(self):
         return self.invoice_number
     
