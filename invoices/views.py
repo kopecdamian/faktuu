@@ -116,13 +116,19 @@ def productSave(request):
     if request.method == 'POST':
 
         productName = request.POST.get('productName')
+        vatRate = request.POST.get('vatRate')
+        priceNetto = request.POST.get('priceNetto')
+        priceBrutto = request.POST.get('priceBrutto')
         
         Product.objects.create(
-            name = productName
+            name = productName,
+            vat_rate = vatRate,
+            price_netto = priceNetto,
+            price_brutto = priceBrutto
         )
     return HttpResponseRedirect(reverse("invoices:products"))
 
 # Product Detail
 def productDetail(request, product_id):
-    product = get_object_or_404(Client, pk=product_id)
+    product = get_object_or_404(Product, pk=product_id)
     return render(request, "invoices/productDetail.html", {"product": product})
