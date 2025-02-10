@@ -42,6 +42,13 @@ class Invoice(models.Model):
     def __str__(self):
         return self.invoice_number
     
+class InvoiceProduct(models.Model):
+    invoice = models.ForeignKey(Invoice, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    quantity = models.IntegerField(default=1)
+    def __str__(self):
+        return f"{self.product.name} x {self.quantity} ({self.invoice.invoice_number})"
+    
 # Table: Highest Invoice Number
 class InvoiceCounter(models.Model):
     client = models.CharField(max_length=255)
