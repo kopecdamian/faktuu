@@ -29,7 +29,7 @@ urlpatterns = [
      # /invoice/products/create
     path("invoices/products/create", views.productForm, name="productForm"),
       # /invoice/products/save
-    path("invoices/products/save", views.productSave, name="productSave"),
+    # path("invoices/products/save", views.productSave, name="productSave"),
     # /invoice/products/5
     path("invoices/products/<int:product_id>/", views.productDetail, name="productDetail"),
 ]

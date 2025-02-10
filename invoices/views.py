@@ -1,6 +1,7 @@
 from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponse, HttpResponseRedirect
 from .models import Invoice, InvoiceCounter, Client, Product
+from .forms import ProductForm
 from django.urls import reverse
 from datetime import datetime
 
@@ -109,24 +110,33 @@ def products(request):
 
 # Create New Product
 def productForm(request):
-    return render(request, "invoices/productForm.html")
+    if request.method == "POST":
+        form = ProductForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse("invoices:products"))
+    else:
+        form = ProductForm()
+
+    return render(request, "invoices/productForm.html", {"form": form})
+    # return render(request, "invoices/productForm.html")
 
 # Save New Product
-def productSave(request):
-    if request.method == 'POST':
+# def productSave(request):
+#     if request.method == 'POST':
 
-        productName = request.POST.get('productName')
-        vatRate = request.POST.get('vatRate')
-        priceNetto = request.POST.get('priceNetto')
-        priceBrutto = request.POST.get('priceBrutto')
+#         productName = request.POST.get('productName')
+#         vatRate = request.POST.get('vatRate')
+#         priceNetto = request.POST.get('priceNetto')
+#         priceBrutto = request.POST.get('priceBrutto')
         
-        Product.objects.create(
-            name = productName,
-            vat_rate = vatRate,
-            price_netto = priceNetto,
-            price_brutto = priceBrutto
-        )
-    return HttpResponseRedirect(reverse("invoices:products"))
+#         Product.objects.create(
+#             name = productName,
+#             vat_rate = vatRate,
+#             price_netto = priceNetto,
+#             price_brutto = priceBrutto
+#         )
+#     return HttpResponseRedirect(reverse("invoices:products"))
 
 # Product Detail
 def productDetail(request, product_id):

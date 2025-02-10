@@ -5,25 +5,11 @@
 {% block titlePage %}Dodaj Produkt{% endblock %}
 
 {% block content %}
-    <form action="{% url 'invoices:productSave' %}" method="post">
+    <form method="post">
         {% csrf_token %}
-        <fieldset>
-            <label for="productName">Nazwa Produktu:</label>
-            <input type="text" name="productName" id="productName">
-
-            <label for="vatRate">VAT:</label>
-            <input type="text" name="vatRate" id="vatRate">
-
-            <label for="priceNetto">Kwota Netto:</label>
-            <input type="text" name="priceNetto" id="priceNetto">
-
-            <label for="priceBrutto">Kwota Brutto:</label>
-            <input type="text" name="priceBrutto" id="priceBrutto">
-        </fieldset>
-        
-        <div class="button-group">
-            <button type="submit" class="btn btn-primary">Zapisz</button>
-            <a href="{% url 'invoices:products' %}" class="btn btn-secondary">Anuluj</a>
-        </div>
+        {{ form.as_p }} 
+        <button type="submit" class="btn btn-primary">Zapisz produkt</button>
+        <!-- <button type="submit" class="btn btn-primary">Zapisz</button> -->
+        <a href="{% url 'invoices:products' %}" class="btn btn-secondary">Anuluj</a>
     </form>
 {% endblock %}
