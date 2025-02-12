@@ -1,7 +1,7 @@
 from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponse, HttpResponseRedirect
 from .models import Invoice, InvoiceCounter, Client, Product, InvoiceProduct
-from .forms import ProductForm
+from .forms import ProductForm, ClientForm
 from django.urls import reverse
 from datetime import datetime
 
@@ -69,7 +69,17 @@ def clients(request):
 
 # Create New Client
 def clientform(request):
-    return render(request, "invoices/clientform.html")
+    if request.method == "POST":
+        form = ClientForm(request.POST)
+        print(form)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse("invoices:clients"))
+    else:
+        form = ClientForm()
+
+    return render(request, "invoices/clientform.html", {"form": form})
+    # return render(request, "invoices/clientform.html")
 
 # Save New Client
 def saveclient(request):
