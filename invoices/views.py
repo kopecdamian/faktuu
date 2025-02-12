@@ -1,6 +1,6 @@
 from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponse, HttpResponseRedirect
-from .models import Invoice, InvoiceCounter, Client, Product
+from .models import Invoice, InvoiceCounter, Client, Product, InvoiceProduct
 from .forms import ProductForm
 from django.urls import reverse
 from datetime import datetime
@@ -52,7 +52,8 @@ def save(request):
 # Detail
 def detail(request, invoice_id):
     invoice = get_object_or_404(Invoice, pk=invoice_id)
-    return render(request, "invoices/detail.html", {"invoice": invoice})
+    products = invoice.products.all()
+    return render(request, "invoices/detail.html", {"invoice": invoice, "products": products})
 
 # PDF
 def pdf(request, invoice_id):
@@ -112,6 +113,7 @@ def products(request):
 def productForm(request):
     if request.method == "POST":
         form = ProductForm(request.POST)
+        print(form)
         if form.is_valid():
             form.save()
             return HttpResponseRedirect(reverse("invoices:products"))
