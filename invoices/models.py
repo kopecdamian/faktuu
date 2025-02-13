@@ -1,5 +1,6 @@
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
+from datetime import datetime
 
 # Table: Clients
 class Client(models.Model):
@@ -40,15 +41,33 @@ class Invoice(models.Model):
     total_netto = models.DecimalField(max_digits=10, decimal_places=2)
     total_brutto = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
+    def save(self, *args, **kwargs):
+        # compare last invoice number with current date and create new invoice number
+        current_year = datetime.now().year
+        current_month = f"{datetime.now().month:02}"
+        old_invoice_number = InvoiceCounter.objects.filter(client = "Damian").first().highest_number
+        invoice_prefix, invoice_year, invoice_month, document_number = old_invoice_number.split("/")
+        if(int(invoice_year) == int(current_year) and current_month == invoice_month):
+            new_document_number = int(document_number) + 1
+            new_invoice_number = f"FV/{current_year}/{current_month}/{new_document_number}"
+        else:
+            new_invoice_number = f"FV/{current_year}/{current_month}/1"
+        
+        # save new invoice number in database
+        InvoiceCounter.objects.filter(client = "Damian").update(highest_number=new_invoice_number)
+
+        self.invoice_number = new_invoice_number
+        super().save(*args, **kwargs)
     def __str__(self):
         return self.invoice_number
     
 class InvoiceProduct(models.Model):
     invoice = models.ForeignKey(Invoice, on_delete=models.CASCADE, related_name="products")
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    name = models.CharField(max_length=255) 
+    price = models.DecimalField(max_digits=10, decimal_places=2)
     quantity = models.IntegerField(default=1)
     def __str__(self):
-        return f"{self.product.name} x {self.quantity} ({self.invoice.invoice_number})"
+        return f"{self.name} x {self.quantity} ({self.invoice.invoice_number})"
     
 # Table: Highest Invoice Number
 class InvoiceCounter(models.Model):

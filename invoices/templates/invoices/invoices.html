@@ -4,7 +4,7 @@
 
 {% block titlePage %}Faktury Sprzedazy{% endblock %}
 
-{% block button %}<a href="{% url 'invoices:forms' %}" class="btn">Dodaj Fakturę Sprzedaży</a>{% endblock %}
+{% block button %}<a href="{% url 'invoices:invoiceForm' %}" class="btn">Dodaj Fakturę Sprzedaży</a>{% endblock %}
 
 
 {% block content %}
@@ -14,7 +14,7 @@
             <h2>{{ invoice.invoice_number }}</h2>
             <p>Klient: {{ invoice.client }}</p>
             <p>Produkt: {{ invoice.product }}</p>
-            <a href="{% url 'invoices:detail' invoice.id %}" class="btn">Zobacz szczegóły</a>
+            <a href="{% url 'invoices:invoiceDetail' invoice.id %}" class="btn">Zobacz szczegóły</a>
         </div>
         {% empty %}
         <p>Brak faktur do wyświetlenia.</p>

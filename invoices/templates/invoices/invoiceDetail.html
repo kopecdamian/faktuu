@@ -8,7 +8,10 @@
     <div class="detail-card">
         <h1>{{ invoice.invoice_number }}</h1>
         <p><strong>Klient:</strong> {{ invoice.client }}</p>
-        <p><strong>Produkt:</strong> {{ invoice.product }}</p>
-        <a href="{% url 'invoices:index' %}" class="btn">Powrót do listy</a>
+        <p><strong>Produkt:</strong></p>
+        {% for product in products %}
+        <p>Produkt: {{ product.name }}, Liczba: {{ product.quantity }}, Cena: {{ product.price }}</p>
+        {% endfor %}
+        <a href="{% url 'invoices:invoices' %}" class="btn">Powrót do listy</a>
     </div>
 {% endblock %}

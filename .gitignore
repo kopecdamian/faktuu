@@ -34,3 +34,5 @@ media/
 # Ignore system-specific files
 .DS_Store
 Thumbs.db
+
+*.sh
