@@ -5,13 +5,13 @@ from . import views
 app_name = "invoices"
 urlpatterns = [
     # /invoices
-    path("invoices/", views.index, name="index"),
+    path("invoices/", views.invoices, name="invoices"),
      # /invoice/create
-    path("invoices/create", views.forms, name="forms"),
+    path("invoices/create", views.invoiceForm, name="invoiceForm"),
     # /invoice/save
-    path("invoices/save", views.save, name="save"),
+    # path("invoices/save", views.save, name="save"),
     # /invoice/5
-    path("invoices/<int:invoice_id>/", views.detail, name="detail"),
+    path("invoices/<int:invoice_id>/", views.invoiceDetail, name="invoiceDetail"),
     # /invoice/5/pdf
     path("invoices/<int:invoice_id>/pdf/", views.pdf, name="products"),
 
@@ -20,7 +20,7 @@ urlpatterns = [
      # /invoice/clients/create
     path("invoices/clients/create", views.clientform, name="clientform"),
       # /invoice/clients/save
-    path("invoices/clients/save", views.saveclient, name="saveclient"),
+    # path("invoices/clients/save", views.saveclient, name="saveclient"),
     # /invoice/clients/5
     path("invoices/clients/<int:client_id>/", views.clientDetail, name="clientDetail"),
 

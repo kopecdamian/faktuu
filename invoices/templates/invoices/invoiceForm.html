@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block title %}Dodaj Fakturę Sprzedaży{% endblock %}
+
+{% block titlePage %}Dodaj Fakturę Sprzedaży{% endblock %}
+
+{% block content %}
+    <h1>Nowa faktura</h1>
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }} 
+        {{ formset.management_form }}
+        <div id="product-formset">
+            {% for form in formset %}
+                <div class="product-form">
+                    {{ form.as_p }}
+                </div>
+            {% endfor %}
+        </div>
+        <button type="submit" class="btn btn-primary">Zapisz fakturę</button>
+        <a href="{% url 'invoices:invoices' %}" class="btn btn-secondary">Anuluj</a>
+    </form>
+{% endblock %}

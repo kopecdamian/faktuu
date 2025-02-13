@@ -5,37 +5,10 @@
 {% block titlePage %}Dodaj Klienta{% endblock %}
 
 {% block content %}
-    <form action="{% url 'invoices:saveclient' %}" method="post">
+    <form method="post">
         {% csrf_token %}
-        <fieldset>
-            <label for="clientName">Nazwa Klienta:</label>
-            <input type="text" name="clientName" id="clientName">
-            
-            <label for="nipNumber">Numer NIP:</label>
-            <input type="text" name="nipNumber" id="nipNumber">
-
-            <label for="adress">Adres:</label>
-            <input type="text" name="adress" id="adress">
-
-            <label for="city">Miasto:</label>
-            <input type="text" name="city" id="city">
-
-            <label for="postalCode">Kod Pocztowy:</label>
-            <input type="text" name="postalCode" id="postalCode">
-
-            <label for="country">Kraj:</label>
-            <input type="text" name="country" id="country">
-
-            <label for="phoneNumber">Miasto:</label>
-            <input type="text" name="phoneNumber" id="phoneNumber">
-
-            <label for="email">Email:</label>
-            <input type="text" name="email" id="email">
-        </fieldset>
-        
-        <div class="button-group">
-            <button type="submit" class="btn btn-primary">Zapisz</button>
-            <a href="{% url 'invoices:clients' %}" class="btn btn-secondary">Anuluj</a>
-        </div>
+        {{ form.as_p }} 
+        <button type="submit" class="btn btn-primary">Zapisz klienta</button>
+        <a href="{% url 'invoices:products' %}" class="btn btn-secondary">Anuluj</a>
     </form>
 {% endblock %}
