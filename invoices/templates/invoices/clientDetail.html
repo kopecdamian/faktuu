@@ -2,6 +2,13 @@
 
 {% block title %}{{client.name}}{% endblock %}
 
+{% block button %}
+    <form method="post" action="{% url 'invoices:clientDelete' client.id %}">
+        {% csrf_token %}
+        <button type="submit">Usuń klienta</button>
+    </form>
+{% endblock %}
+
 {% block titlePage %}{{client.name}}{% endblock %}
 
 {% block content %}

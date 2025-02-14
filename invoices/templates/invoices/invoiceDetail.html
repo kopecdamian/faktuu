@@ -2,6 +2,13 @@
 
 {% block title %}Faktura {{invoice.invoice_number}}{% endblock %}
 
+{% block button %}
+    <form method="post" action="{% url 'invoices:invoiceDelete' invoice.id %}">
+        {% csrf_token %}
+        <button type="submit">Usuń fakturę</button>
+    </form>
+{% endblock %}
+
 {% block titlePage %}Faktura {{invoice.invoice_number}}{% endblock %}
 
 {% block content %}

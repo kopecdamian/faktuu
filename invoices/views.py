@@ -66,11 +66,19 @@ def invoiceDetail(request, invoice_id):
     products = invoice.products.all()
     return render(request, "invoices/invoiceDetail.html", {"invoice": invoice, "products": products})
 
+# Delete Invoice
+def invoiceDelete(request, invoice_id):
+    invoice = get_object_or_404(Invoice, pk=invoice_id)
+    if request.method == "POST":
+        invoice.delete()
+        return HttpResponseRedirect(reverse("invoices:invoices"))
+    return render(request, "invoices/invoiceDetail.html", {"invoice": invoice})
+
 # PDF
 def pdf(request, invoice_id):
     return HttpResponse("Invoice download page.")
 
-# clietns
+# clients
 def clients(request):
     all_clients = Client.objects.all()
     context = {
@@ -122,6 +130,14 @@ def clientDetail(request, client_id):
     client = get_object_or_404(Client, pk=client_id)
     return render(request, "invoices/clientDetail.html", {"client": client})
 
+# Delete Client
+def clientDelete(request, client_id):
+    client = get_object_or_404(Client, pk=client_id)
+    if request.method == "POST":
+        client.delete()
+        return HttpResponseRedirect(reverse("invoices:clients"))
+    return render(request, "invoices/clientDetail.html", {"client": client})
+
 # Products
 def products(request):
     all_products = Product.objects.all()
@@ -164,4 +180,12 @@ def productForm(request):
 # Product Detail
 def productDetail(request, product_id):
     product = get_object_or_404(Product, pk=product_id)
+    return render(request, "invoices/productDetail.html", {"product": product})
+
+# Delete Product
+def productDelete(request, product_id):
+    product = get_object_or_404(Product, pk=product_id)
+    if request.method == "POST":
+        product.delete()
+        return HttpResponseRedirect(reverse("invoices:products"))
     return render(request, "invoices/productDetail.html", {"product": product})

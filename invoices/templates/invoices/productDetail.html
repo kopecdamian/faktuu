@@ -2,6 +2,13 @@
 
 {% block title %}{{product.name}}{% endblock %}
 
+{% block button %}
+    <form method="post" action="{% url 'invoices:productDelete' product.id %}">
+        {% csrf_token %}
+        <button type="submit">Usuń produkt</button>
+    </form>
+{% endblock %}
+
 {% block titlePage %}{{product.name}}{% endblock %}
 
 {% block content %}

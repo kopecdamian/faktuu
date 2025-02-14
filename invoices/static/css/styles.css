@@ -226,7 +226,7 @@ a.btn-secondary:hover {
     transform: scale(1.05);
 }
 
-form {
+.formstyle {
     width: 90%;
     max-width: 600px;
     background: white;
