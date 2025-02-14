@@ -9,6 +9,6 @@
         {% csrf_token %}
         {{ form.as_p }} 
         <button type="submit" class="btn btn-primary">Zapisz klienta</button>
-        <a href="{% url 'invoices:products' %}" class="btn btn-secondary">Anuluj</a>
+        <a href="{% url 'invoices:clients' %}" class="btn btn-secondary">Anuluj</a>
     </form>
 {% endblock %}
