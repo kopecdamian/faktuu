@@ -4,6 +4,7 @@ from .models import Invoice, InvoiceCounter, Client, Product, InvoiceProduct
 from .forms import ProductForm, ClientForm, InvoiceForm, InvoiceProductFormSet
 from django.urls import reverse
 from datetime import datetime
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 # Invoices
@@ -162,6 +163,7 @@ def clientDelete(request, client_id):
     return render(request, "invoices/clientDetail.html", {"client": client})
 
 # Products
+@login_required(login_url='/accounts/login/')
 def products(request):
     all_products = Product.objects.all()
     context = {

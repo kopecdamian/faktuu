@@ -73,6 +73,15 @@ body {
     background-color: #fff;
 }
 
+.topbar {
+    width: 100%;
+    display: flex; 
+    justify-content:right;
+    align-items: center; 
+    padding: 10px 20px;
+    background-color: rgb(255, 216, 41);
+}
+
 h1 {
     color: #444;
     margin-bottom: 20px;

@@ -16,8 +16,12 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.views.generic.base import TemplateView 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path("", include("invoices.urls"))
+    path('accounts/', include("django.contrib.auth.urls")),
+    path("accounts/", include("accounts.urls")),
+    path("invoices/", include("invoices.urls")),
+    path("", TemplateView.as_view(template_name="home.html"), name="home"), # use to read template directly from html, without logic
 ]

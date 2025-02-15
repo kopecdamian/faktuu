@@ -18,12 +18,19 @@
             </ul>
         </div>
         <div class="content">
+            <div class="topbar">
+                {{ user.username }}
+                <form action="{% url 'logout' %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-primary">Wyloguj</button>
+                </form>
+            </div>
             <div class="header">
                 <h1>{% block titlePage %}Strona{% endblock %}</h1>
                 {% block button %}{% endblock %}
             </div>
             {% block content %}{% endblock %}
-        </div>
+        </div.navabr>
     </div>
     
 </body>
