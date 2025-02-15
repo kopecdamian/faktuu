@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}Faktuu{% endblock %}
+
+{% block content %}
+{% if user.is_authenticated %}
+Hi {{ user.username }}!
+    <form action="{% url 'logout' %}" method="post">
+        {% csrf_token %}
+        <button type="submit">Wyloguj</button>
+    </form>
+{% else %}
+    <p>Witaj na stronie Faktuu, czy chcesz dołączyć?</p>
+    <a href="{% url 'login' %}">Log In</a>
+    <a href="{% url 'signup' %}">Sign Up</a>
+{% endif %}
+{% endblock %}
