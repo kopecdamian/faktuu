@@ -42,21 +42,22 @@ class Invoice(models.Model):
     total_brutto = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     def save(self, *args, **kwargs):
+        if not self.invoice_number: 
         # compare last invoice number with current date and create new invoice number
-        current_year = datetime.now().year
-        current_month = f"{datetime.now().month:02}"
-        old_invoice_number = InvoiceCounter.objects.filter(client = "Damian").first().highest_number
-        invoice_prefix, invoice_year, invoice_month, document_number = old_invoice_number.split("/")
-        if(int(invoice_year) == int(current_year) and current_month == invoice_month):
-            new_document_number = int(document_number) + 1
-            new_invoice_number = f"FV/{current_year}/{current_month}/{new_document_number}"
-        else:
-            new_invoice_number = f"FV/{current_year}/{current_month}/1"
-        
-        # save new invoice number in database
-        InvoiceCounter.objects.filter(client = "Damian").update(highest_number=new_invoice_number)
+            current_year = datetime.now().year
+            current_month = f"{datetime.now().month:02}"
+            old_invoice_number = InvoiceCounter.objects.filter(client = "Damian").first().highest_number
+            invoice_prefix, invoice_year, invoice_month, document_number = old_invoice_number.split("/")
+            if(int(invoice_year) == int(current_year) and current_month == invoice_month):
+                new_document_number = int(document_number) + 1
+                new_invoice_number = f"FV/{current_year}/{current_month}/{new_document_number}"
+            else:
+                new_invoice_number = f"FV/{current_year}/{current_month}/1"
+            
+            # save new invoice number in database
+            InvoiceCounter.objects.filter(client = "Damian").update(highest_number=new_invoice_number)
 
-        self.invoice_number = new_invoice_number
+            self.invoice_number = new_invoice_number
         super().save(*args, **kwargs)
     def __str__(self):
         return self.invoice_number

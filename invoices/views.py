@@ -64,6 +64,22 @@ def invoiceForm(request):
 def invoiceDetail(request, invoice_id):
     invoice = get_object_or_404(Invoice, pk=invoice_id)
     products = invoice.products.all()
+    if request.method == "POST":
+        form = InvoiceForm(request.POST, instance=invoice)
+        formset = InvoiceProductFormSet(request.POST, instance=invoice)
+        if form.is_valid() and formset.is_valid():
+            invoice = form.save()
+            products = formset.save(commit=False)
+            for product in products:
+                product.invoice = invoice
+                product.save()
+            return HttpResponseRedirect(reverse("invoices:invoices"))
+    else:
+        form = InvoiceForm(instance=invoice)
+        formset = InvoiceProductFormSet(instance=invoice)
+
+    return render(request, "invoices/invoiceDetail.html", {"form": form, "formset":formset, "invoice":invoice})
+    products = invoice.products.all()
     return render(request, "invoices/invoiceDetail.html", {"invoice": invoice, "products": products})
 
 # Delete Invoice
@@ -128,7 +144,14 @@ def clientform(request):
 # Client Detail
 def clientDetail(request, client_id):
     client = get_object_or_404(Client, pk=client_id)
-    return render(request, "invoices/clientDetail.html", {"client": client})
+    if request.method == "POST":
+        form = ClientForm(request.POST, instance=client)  
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse("invoices:clients"))
+    else:
+        form = ClientForm(instance=client)
+    return render(request, "invoices/clientDetail.html", {"form":form, "client": client})
 
 # Delete Client
 def clientDelete(request, client_id):
@@ -180,7 +203,14 @@ def productForm(request):
 # Product Detail
 def productDetail(request, product_id):
     product = get_object_or_404(Product, pk=product_id)
-    return render(request, "invoices/productDetail.html", {"product": product})
+    if request.method == "POST":
+        form = ProductForm(request.POST, instance=product)  
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse("invoices:products"))
+    else:
+        form = ProductForm(instance=product)
+    return render(request, "invoices/productDetail.html", {"form": form, "product":product})
 
 # Delete Product
 def productDelete(request, product_id):

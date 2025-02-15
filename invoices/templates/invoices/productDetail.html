@@ -12,8 +12,11 @@
 {% block titlePage %}{{product.name}}{% endblock %}
 
 {% block content %}
-    <div class="detail-card">
-        <h1><strong>Nazwa Produktu:</strong> {{ product.name }}</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }} 
+        <button type="submit" class="btn btn-primary">Zapisz produkt</button>
+        <!-- <h1><strong>Nazwa Produktu:</strong> {{ product.name }}</h1> -->
         <a href="{% url 'invoices:products' %}" class="btn">Powrót do listy</a>
-    </div>
+    </form>
 {% endblock %}

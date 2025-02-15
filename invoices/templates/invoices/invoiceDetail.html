@@ -1,6 +1,6 @@
  {% extends 'base.html' %}
 
-{% block title %}Faktura {{invoice.invoice_number}}{% endblock %}
+{% block title %}{{invoice.invoice_number}}{% endblock %}
 
 {% block button %}
     <form method="post" action="{% url 'invoices:invoiceDelete' invoice.id %}">
@@ -9,16 +9,21 @@
     </form>
 {% endblock %}
 
-{% block titlePage %}Faktura {{invoice.invoice_number}}{% endblock %}
+{% block titlePage %}{{invoice.invoice_number}}{% endblock %}
 
 {% block content %}
-    <div class="detail-card">
-        <h1>{{ invoice.invoice_number }}</h1>
-        <p><strong>Klient:</strong> {{ invoice.client }}</p>
-        <p><strong>Produkt:</strong></p>
-        {% for product in products %}
-        <p>Produkt: {{ product.name }}, Liczba: {{ product.quantity }}, Cena: {{ product.price }}</p>
-        {% endfor %}
-        <a href="{% url 'invoices:invoices' %}" class="btn">Powrót do listy</a>
-    </div>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }} 
+        {{ formset.management_form }}
+        <div id="product-formset">
+            {% for form in formset %}
+                <div class="product-form">
+                    {{ form.as_p }}
+                </div>
+            {% endfor %}
+        </div>
+        <button type="submit" class="btn btn-primary">Zapisz fakturę</button>
+        <a href="{% url 'invoices:invoices' %}" class="btn btn-secondary">Anuluj</a>
+    </form>
 {% endblock %}
