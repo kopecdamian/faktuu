@@ -4,7 +4,7 @@
 
 {% block content %}
 {% if user.is_authenticated %}
-Hi {{ user.username }}!
+Hi {{ user.username }}
     <form action="{% url 'logout' %}" method="post">
         {% csrf_token %}
         <button type="submit">Wyloguj</button>
@@ -13,5 +13,6 @@ Hi {{ user.username }}!
     <p>Witaj na stronie Faktuu, czy chcesz dołączyć?</p>
     <a href="{% url 'login' %}">Log In</a>
     <a href="{% url 'signup' %}">Sign Up</a>
+    <a href="{% url 'password_reset' %}">Resetuj hasło</a>
 {% endif %}
 {% endblock %}
