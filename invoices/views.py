@@ -8,6 +8,7 @@ from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 # Invoices
+@login_required()
 def invoices(request):
     all_invoices = Invoice.objects.all()
     context = {
@@ -16,6 +17,7 @@ def invoices(request):
     return render(request, "invoices/invoices.html", context)
     
 # Create invoice
+@login_required()
 def invoiceForm(request):
     if request.method == "POST":
         form = InvoiceForm(request.POST)
@@ -62,6 +64,7 @@ def invoiceForm(request):
 #     return HttpResponseRedirect(reverse("invoices:index"))
 
 # Detail
+@login_required()
 def invoiceDetail(request, invoice_id):
     invoice = get_object_or_404(Invoice, pk=invoice_id)
     products = invoice.products.all()
@@ -84,6 +87,7 @@ def invoiceDetail(request, invoice_id):
     return render(request, "invoices/invoiceDetail.html", {"invoice": invoice, "products": products})
 
 # Delete Invoice
+@login_required()
 def invoiceDelete(request, invoice_id):
     invoice = get_object_or_404(Invoice, pk=invoice_id)
     if request.method == "POST":
@@ -92,10 +96,11 @@ def invoiceDelete(request, invoice_id):
     return render(request, "invoices/invoiceDetail.html", {"invoice": invoice})
 
 # PDF
-def pdf(request, invoice_id):
-    return HttpResponse("Invoice download page.")
+# def pdf(request, invoice_id):
+#     return HttpResponse("Invoice download page.")
 
 # clients
+@login_required()
 def clients(request):
     all_clients = Client.objects.all()
     context = {
@@ -104,6 +109,7 @@ def clients(request):
     return render(request, "invoices/clients.html", context)
 
 # Create New Client
+@login_required()
 def clientform(request):
     if request.method == "POST":
         form = ClientForm(request.POST)
@@ -143,6 +149,7 @@ def clientform(request):
 #     return HttpResponseRedirect(reverse("invoices:clients"))
 
 # Client Detail
+@login_required()
 def clientDetail(request, client_id):
     client = get_object_or_404(Client, pk=client_id)
     if request.method == "POST":
@@ -155,6 +162,7 @@ def clientDetail(request, client_id):
     return render(request, "invoices/clientDetail.html", {"form":form, "client": client})
 
 # Delete Client
+@login_required()
 def clientDelete(request, client_id):
     client = get_object_or_404(Client, pk=client_id)
     if request.method == "POST":
@@ -163,7 +171,7 @@ def clientDelete(request, client_id):
     return render(request, "invoices/clientDetail.html", {"client": client})
 
 # Products
-@login_required(login_url='/accounts/login/')
+@login_required()
 def products(request):
     all_products = Product.objects.all()
     context = {
@@ -172,6 +180,7 @@ def products(request):
     return render(request, "invoices/products.html", context)
 
 # Create New Product
+@login_required()
 def productForm(request):
     if request.method == "POST":
         form = ProductForm(request.POST)
@@ -203,6 +212,7 @@ def productForm(request):
 #     return HttpResponseRedirect(reverse("invoices:products"))
 
 # Product Detail
+@login_required()
 def productDetail(request, product_id):
     product = get_object_or_404(Product, pk=product_id)
     if request.method == "POST":
@@ -215,6 +225,7 @@ def productDetail(request, product_id):
     return render(request, "invoices/productDetail.html", {"form": form, "product":product})
 
 # Delete Product
+@login_required()
 def productDelete(request, product_id):
     product = get_object_or_404(Product, pk=product_id)
     if request.method == "POST":

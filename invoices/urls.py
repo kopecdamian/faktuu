@@ -15,7 +15,7 @@ urlpatterns = [
      # /invoice/invoices/5/delete
     path("invoices/<int:invoice_id>/delete", views.invoiceDelete, name="invoiceDelete"),
     # /invoice/5/pdf
-    path("<int:invoice_id>/pdf/", views.pdf, name="products"),
+    # path("<int:invoice_id>/pdf/", views.pdf, name="products"),
 
     # /invoice/clients
     path("clients", views.clients, name="clients"),
