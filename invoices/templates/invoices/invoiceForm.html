@@ -10,15 +10,38 @@
     <form method="post">
         {% csrf_token %}
         {{ form.as_p }} 
-        {{ formset.management_form }}
-        <div id="product-formset">
-            {% for form in formset %}
-                <div class="product-form">
-                    {{ form.as_p }}
-                </div>
-            {% endfor %}
+        <div id="product-container">
+
         </div>
+        <button id="add-product" type="button" class="btn btn-primary">Dodaj produkt</button>
         <button type="submit" class="btn btn-primary">Zapisz fakturę</button>
         <a href="{% url 'invoices:invoices' %}" class="btn btn-secondary">Anuluj</a>
     </form>
+{% endblock %}
+
+{% block script %}
+    <script>
+        document.getElementById("add-product").addEventListener("click", function (event) {
+            event.preventDefault();
+            let container = document.getElementById("product-container");
+
+            let newProduct = document.createElement("div");
+            newProduct.classList.add("product-item");
+
+            newProduct.innerHTML = `
+            <div class="product-entry">
+                <label>Nazwa produktu:</label>
+                <input type="text" name="productName[]"placeholder="Nazwa">
+
+                <label>Cena:</label>
+                <input type="number" name="productPrice[]" placeholder="Cena">
+
+                <label>Ilość:</label>
+                <input type="number" name="productQuantity[]" placeholder="Ilość">
+            </div>
+            `;
+
+            container.appendChild(newProduct);
+        })
+    </script>
 {% endblock %}
