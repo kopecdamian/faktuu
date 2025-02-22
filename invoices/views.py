@@ -23,16 +23,15 @@ def invoiceForm(request):
         form = InvoiceForm(request.POST)
         if form.is_valid():
             invoice = form.save()
-            print(request.POST)
             productsName = request.POST.getlist("productName[]")
             productsPrice = request.POST.getlist("productPrice[]")
             productsQuantity = request.POST.getlist("productQuantity[]")
-            for i in range(len(productsName)):
+            for index in range(len(productsName)):
                 InvoiceProduct.objects.create(
                     invoice = invoice,
-                    name = productsName[i],
-                    price = productsPrice[i],
-                    quantity = int(productsQuantity[i])
+                    name = productsName[index],
+                    price = productsPrice[index],
+                    quantity = int(productsQuantity[index])
                 )
         return HttpResponseRedirect(reverse("invoices:invoices"))
     else:
@@ -43,25 +42,51 @@ def invoiceForm(request):
 # Detail
 @login_required()
 def invoiceDetail(request, invoice_id):
+    # get invoice data
     invoice = get_object_or_404(Invoice, pk=invoice_id)
     products = invoice.products.all()
+    # update invoice data
     if request.method == "POST":
         form = InvoiceForm(request.POST, instance=invoice)
-        formset = InvoiceProductFormSet(request.POST, instance=invoice)
-        if form.is_valid() and formset.is_valid():
+        if form.is_valid():
             invoice = form.save()
-            products = formset.save(commit=False)
+            id_existing_products = []
+            id_updated_product = []
+            # add invoiceProduct id to list
             for product in products:
-                product.invoice = invoice
-                product.save()
+                id_existing_products.append(product.id)
+            # get data from form
+            productsId = request.POST.getlist("productId[]")
+            productsName = request.POST.getlist("productName[]")
+            productsPrice = request.POST.getlist("productPrice[]")
+            productsQuantity = request.POST.getlist("productQuantity[]")
+            for index in range(len(productsName)):
+                # update existing invoiceProduct
+                print(productsId)
+                if productsId[index] in id_existing_products:
+                    product = products.filter(id=productsId).first()
+                    product.name = productsId[index]
+                    product.price = productsPrice[index]
+                    product.quantity = productsQuantity[index]
+                    product.save()
+                    id_updated_product.append(productsId[index])
+                # create new invoiceProduct
+                else:
+                    InvoiceProduct.objects.create(
+                        invoice = invoice,
+                        name = productsName[index],
+                        price = productsPrice[index],
+                        quantity = int(productsQuantity[index])
+                    )
+            # delete invoiceProduct which was deleted in form
+            for id_exist in id_existing_products:
+                if id_exist not in id_updated_product:
+                    products.filter(id=id_exist).first().delete()
             return HttpResponseRedirect(reverse("invoices:invoices"))
+    # show invoice data
     else:
         form = InvoiceForm(instance=invoice)
-        formset = InvoiceProductFormSet(instance=invoice)
-
-    return render(request, "invoices/invoiceDetail.html", {"form": form, "formset":formset, "invoice":invoice})
-    products = invoice.products.all()
-    return render(request, "invoices/invoiceDetail.html", {"invoice": invoice, "products": products})
+    return render(request, "invoices/invoiceForm.html", {"form": form, "products":products, "invoice":invoice})
 
 # Delete Invoice
 @login_required()
