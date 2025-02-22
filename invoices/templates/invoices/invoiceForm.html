@@ -1,17 +1,41 @@
 {% extends 'baseInvoice.html' %}
 
-{% block title %}Dodaj Fakturę Sprzedaży{% endblock %}
+{% block title %}
+    {% if invoice.invoice_number %}
+        {{invoice.invoice_number}}
+    {% else %}
+        Dodaj Fakturę Sprzedazy
+    {% endif %}
+{% endblock %}
 
-{% block titlePage %}Dodaj Fakturę Sprzedaży{% endblock %}
+{% block titlePage %}
+    {% if invoice.invoice_number %}
+        {{invoice.invoice_number}}
+    {% else %}
+        Dodaj Fakturę Sprzedazy
+    {% endif %}
+{% endblock %}
 
 {% block content %}
-    <h1>Nowa faktura</h1>
-
     <form method="post">
         {% csrf_token %}
         {{ form.as_p }} 
         <div id="product-container">
-
+            {% for product in products %}
+                <div class="product-entry">
+                    <input type="hidden" name="productId[]" value={{product.id}}>
+                    <label>Nazwa produktu:</label>
+                    <input type="text" name="productName[]"placeholder="Nazwa" value={{product.name}}>
+        
+                    <label>Cena:</label>
+                    <input type="number" name="productPrice[]" placeholder="Cena" value={{product.price}}>
+        
+                    <label>Ilość:</label>
+                    <input type="number" name="productQuantity[]" placeholder="Ilość" value={{product.quantity}}>
+                </div>
+            {% empty %}
+                
+            {% endfor %}
         </div>
         <button id="add-product" type="button" class="btn btn-primary">Dodaj produkt</button>
         <button type="submit" class="btn btn-primary">Zapisz fakturę</button>
@@ -30,6 +54,7 @@
 
             newProduct.innerHTML = `
             <div class="product-entry">
+                <input type="hidden" name="productId[]" value="">
                 <label>Nazwa produktu:</label>
                 <input type="text" name="productName[]"placeholder="Nazwa">
 
