@@ -16,22 +16,36 @@
     {% endif %}
 {% endblock %}
 
+{% block button %}
+    {% if invoice.id %}
+        <form method="post" action="{% url 'invoices:invoiceDelete' invoice.id %}">
+            {% csrf_token %}
+            <button type="submit">Usuń fakturę</button>
+        </form>
+    {% else %}
+        
+    {% endif %}
+    
+{% endblock %}
+
 {% block content %}
     <form method="post">
         {% csrf_token %}
         {{ form.as_p }} 
         <div id="product-container">
             {% for product in products %}
-                <div class="product-entry">
+                <div class="product-entry" data-index="{{ forloop.counter0 }}">
                     <input type="hidden" name="productId[]" value={{product.id}}>
                     <label>Nazwa produktu:</label>
                     <input type="text" name="productName[]"placeholder="Nazwa" value={{product.name}}>
         
                     <label>Cena:</label>
-                    <input type="number" name="productPrice[]" placeholder="Cena" value={{product.price}}>
+                    <input type="number" class="productPrice" name="productPrice[]" placeholder="Cena" value={{product.price}}>
         
                     <label>Ilość:</label>
-                    <input type="number" name="productQuantity[]" placeholder="Ilość" value={{product.quantity}}>
+                    <input type="number" class="productQuantity" name="productQuantity[]" placeholder="Ilość" value={{product.quantity}}>
+
+                    <button id="remove-product-{{ forloop.counter0 }}" type="button" class="btn btn-primary">Usuń produkt</button>
                 </div>
             {% empty %}
                 
@@ -45,28 +59,86 @@
 
 {% block script %}
     <script>
+        let maxIndex = 0;
+        // get highest product index
+        let elements = document.querySelectorAll("[data-index]");
+        elements.forEach(element => {
+            let index = parseInt(element.dataset.index);
+            if (index > maxIndex) {
+                maxIndex = index;
+            }
+        });
+
+        // calculate sum of price of all products
+        function calculateTotal() {
+            let total = 0;
+            const prices = document.querySelectorAll(".productPrice");
+            const quantities = document.querySelectorAll(".productQuantity");
+
+            prices.forEach((priceInput, index) => {
+                const price = parseFloat(priceInput.value);
+                const quantity = parseInt(quantities[index].value);
+
+                if (!isNaN(price) && !isNaN(quantity)) {
+                    const productTotal = price * quantity;
+                    total += productTotal;
+                }
+            })
+
+
+            console.log(total);
+        }
+
+        // add div with new product
         document.getElementById("add-product").addEventListener("click", function (event) {
             event.preventDefault();
+            maxIndex = maxIndex + 1;
+            console.log(maxIndex)
             let container = document.getElementById("product-container");
 
             let newProduct = document.createElement("div");
             newProduct.classList.add("product-item");
 
             newProduct.innerHTML = `
-            <div class="product-entry">
+            <div class="product-entry" data-index="${maxIndex}">
                 <input type="hidden" name="productId[]" value="">
                 <label>Nazwa produktu:</label>
-                <input type="text" name="productName[]"placeholder="Nazwa">
+                <input type="text" name="productName[]"placeholder="Nazwa" >
 
                 <label>Cena:</label>
-                <input type="number" name="productPrice[]" placeholder="Cena">
+                <input type="number" class="productPrice" name="productPrice[]" placeholder="Cena" value=0>
 
                 <label>Ilość:</label>
-                <input type="number" name="productQuantity[]" placeholder="Ilość">
+                <input type="number" class="productQuantity" name="productQuantity[]" placeholder="Ilość" value=0>
+
+                <button id="remove-product-${maxIndex}" type="button" class="btn btn-primary">Usuń produkt</button>
             </div>
             `;
 
             container.appendChild(newProduct);
+        })
+
+        // delete div with product
+        document.getElementById("product-container").addEventListener("click", function (event) {
+            if (event.target) {
+                let productId = event.target.id.replace("remove-product-", ""); 
+                let productEntry = document.querySelector(`.product-entry[data-index='${productId}']`);  
+
+                if (productEntry) {
+                    productEntry.remove();
+                }
+            }
+        });
+
+        // Event delegation
+        document.getElementById("product-container").addEventListener("input", function(event) {
+            if (event.target.classList.contains("productPrice") || event.target.classList.contains("productQuantity")) {
+                calculateTotal();
+            }
+        });
+
+        document.querySelectorAll(".productPrice, .productQuantity").forEach(item => {
+            item.addEventListener("input", calculateTotal);
         })
     </script>
 {% endblock %}
