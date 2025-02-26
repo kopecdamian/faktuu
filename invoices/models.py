@@ -63,10 +63,23 @@ class Invoice(models.Model):
         return self.invoice_number
     
 class InvoiceProduct(models.Model):
+    VALUE_TAX = [
+        (23, 23),
+        (8, 8),
+        (7, 7),
+        (5, 5),
+        (4, 4),
+        (0, 0),
+    ]
+    
     invoice = models.ForeignKey(Invoice, on_delete=models.CASCADE, related_name="products")
     name = models.CharField(max_length=255) 
     price = models.DecimalField(max_digits=10, decimal_places=2)
     quantity = models.IntegerField(default=1)
+    tax = models.IntegerField(
+        choices=VALUE_TAX,
+        default=23
+    )
     def __str__(self):
         return f"{self.name} x {self.quantity} ({self.invoice.invoice_number})"
     
