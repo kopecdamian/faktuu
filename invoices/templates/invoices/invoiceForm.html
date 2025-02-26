@@ -32,18 +32,29 @@
     <form method="post">
         {% csrf_token %}
         {{ form.as_p }} 
+        <input id="totalNettoInput" type="hidden" name="totalNetto" value="">
         <div id="product-container">
             {% for product in products %}
                 <div class="product-entry" data-index="{{ forloop.counter0 }}">
                     <input type="hidden" name="productId[]" value={{product.id}}>
                     <label>Nazwa produktu:</label>
                     <input type="text" name="productName[]"placeholder="Nazwa" value={{product.name}}>
+
+                    <label>Ilość:</label>
+                    <input type="number" class="productQuantity" name="productQuantity[]" placeholder="Ilość" value={{product.quantity}}>
+
+                    <label>VAT:</label>
+                    <select id="tax" class="productTax" name="productTax[]">
+                        <option value="23" {% if product.tax == 23 %}selected{% endif %}>23%</option>
+                        <option value="8" {% if product.tax == 8 %}selected{% endif %}>8%</option>
+                        <option value="7" {% if product.tax == 7 %}selected{% endif %}>7%</option>
+                        <option value="5" {% if product.tax == 5 %}selected{% endif %}>5%</option>
+                        <option value="4" {% if product.tax == 4 %}selected{% endif %}>4%</option>
+                        <option value="0" {% if product.tax == 0 %}selected{% endif %}>0%</option>
+                    </select>
         
                     <label>Cena:</label>
                     <input type="number" class="productPrice" name="productPrice[]" placeholder="Cena" value={{product.price}}>
-        
-                    <label>Ilość:</label>
-                    <input type="number" class="productQuantity" name="productQuantity[]" placeholder="Ilość" value={{product.quantity}}>
 
                     <button id="remove-product-{{ forloop.counter0 }}" type="button" class="btn btn-primary">Usuń produkt</button>
                 </div>
@@ -55,6 +66,11 @@
         <button type="submit" class="btn btn-primary">Zapisz fakturę</button>
         <a href="{% url 'invoices:invoices' %}" class="btn btn-secondary">Anuluj</a>
     </form>
+    <div class="bottombar">
+        <p>Netto: <span id="totalNetto">0.00</span> PLN</p>
+        <p>VAT: <span id="totalVat">0.00</span> PLN</p>
+        <p>Suma: <span id="totalBrutto">0.00</span> PLN</p>
+    </div>
 {% endblock %}
 
 {% block script %}
@@ -71,23 +87,35 @@
 
         // calculate sum of price of all products
         function calculateTotal() {
-            let total = 0;
+            let totalNetto = 0;
+            let totalVat = 0;
+            let totalBrutto = 0;
             const prices = document.querySelectorAll(".productPrice");
+            const vats = document.querySelectorAll(".productTax");
             const quantities = document.querySelectorAll(".productQuantity");
 
             prices.forEach((priceInput, index) => {
                 const price = parseFloat(priceInput.value);
+                const tax = parseInt(vats[index].value);
                 const quantity = parseInt(quantities[index].value);
 
                 if (!isNaN(price) && !isNaN(quantity)) {
                     const productTotal = price * quantity;
-                    total += productTotal;
+                    const vatTotal = price * quantity * tax/100;
+                    totalNetto += productTotal;
+                    totalVat += vatTotal;
+                    totalBrutto += productTotal + vatTotal;
                 }
             })
 
 
-            console.log(total);
+            document.getElementById("totalNetto").textContent = totalNetto.toFixed(2);
+            document.getElementById("totalVat").textContent = totalVat.toFixed(2);
+            document.getElementById("totalBrutto").textContent = totalBrutto.toFixed(2);
+            document.getElementById("totalNettoInput").value = totalNetto.toFixed(2);
         }
+
+        calculateTotal();
 
         // add div with new product
         document.getElementById("add-product").addEventListener("click", function (event) {
@@ -103,13 +131,23 @@
             <div class="product-entry" data-index="${maxIndex}">
                 <input type="hidden" name="productId[]" value="">
                 <label>Nazwa produktu:</label>
-                <input type="text" name="productName[]"placeholder="Nazwa" >
-
-                <label>Cena:</label>
-                <input type="number" class="productPrice" name="productPrice[]" placeholder="Cena" value=0>
+                <input type="text" name="productName[]"placeholder="Nazwa">
 
                 <label>Ilość:</label>
                 <input type="number" class="productQuantity" name="productQuantity[]" placeholder="Ilość" value=0>
+
+                 <label>VAT:</label>
+                    <select id="tax" class="productTax" name="productTax[]" placeholder="VAT" value=23>
+                        <option value="23">23%</option>
+                        <option value="8">8%</option>
+                        <option value="7">7%</option>
+                        <option value="5">5%</option>
+                        <option value="4">4%</option>
+                        <option value="0">0%</option>
+                    </select>
+
+                <label>Cena:</label>
+                <input type="number" class="productPrice" name="productPrice[]" placeholder="Cena" value=0>
 
                 <button id="remove-product-${maxIndex}" type="button" class="btn btn-primary">Usuń produkt</button>
             </div>
@@ -132,12 +170,12 @@
 
         // Event delegation
         document.getElementById("product-container").addEventListener("input", function(event) {
-            if (event.target.classList.contains("productPrice") || event.target.classList.contains("productQuantity")) {
+            if (event.target.classList.contains("productPrice") || event.target.classList.contains("productQuantity") || event.target.classList.contains("productTax")) {
                 calculateTotal();
             }
         });
 
-        document.querySelectorAll(".productPrice, .productQuantity").forEach(item => {
+        document.querySelectorAll(".productPrice, .productQuantity, .productTax").forEach(item => {
             item.addEventListener("input", calculateTotal);
         })
     </script>

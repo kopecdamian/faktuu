@@ -22,15 +22,19 @@ def invoiceForm(request):
     if request.method == "POST":
         form = InvoiceForm(request.POST)
         if form.is_valid():
+            invoice = form.save(commit=False)
+            invoice.total_netto = request.POST.get('totalNetto')
             invoice = form.save()
             productsName = request.POST.getlist("productName[]")
             productsPrice = request.POST.getlist("productPrice[]")
+            productsTax = request.POST.getlist("productTax[]")
             productsQuantity = request.POST.getlist("productQuantity[]")
             for index in range(len(productsName)):
                 InvoiceProduct.objects.create(
                     invoice = invoice,
                     name = productsName[index],
                     price = productsPrice[index],
+                    tax = productsTax[index],
                     quantity = int(productsQuantity[index])
                 )
         return HttpResponseRedirect(reverse("invoices:invoices"))
@@ -48,7 +52,11 @@ def invoiceDetail(request, invoice_id):
     # update invoice data
     if request.method == "POST":
         form = InvoiceForm(request.POST, instance=invoice)
+        print(request.POST)
         if form.is_valid():
+            print('valid')
+            invoice = form.save(commit=False)
+            invoice.total_netto = request.POST.get('totalNetto')
             invoice = form.save()
             id_existing_products = []
             id_updated_product = []
@@ -59,6 +67,7 @@ def invoiceDetail(request, invoice_id):
             productsId = request.POST.getlist("productId[]")
             productsName = request.POST.getlist("productName[]")
             productsPrice = request.POST.getlist("productPrice[]")
+            productsTax = request.POST.getlist("productTax[]")
             productsQuantity = request.POST.getlist("productQuantity[]")
             for index in range(len(productsName)):
                 # update existing invoiceProduct
@@ -76,6 +85,7 @@ def invoiceDetail(request, invoice_id):
                         invoice = invoice,
                         name = productsName[index],
                         price = productsPrice[index],
+                        tax = productsTax[index],
                         quantity = int(productsQuantity[index])
                     )
             # delete invoiceProduct which was deleted in form
