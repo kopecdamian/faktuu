@@ -33,11 +33,26 @@ class Product(models.Model):
 
 # Table: Invoices
 class Invoice(models.Model):
+    VALUE_PAYMENT = [
+            ("cash", "Gotówka"),
+            ("transfer", "Przelew"),
+            ("card", "Karta"),
+        ]
+
     invoice_number = models.CharField(max_length=50, unique=True)
     client = models.ForeignKey(
         Client,
         on_delete=models.CASCADE
     )
+    issue_date = models.DateField()
+    sale_date = models.DateField()
+    payment_method = models.CharField(
+        max_length=50,
+        choices=VALUE_PAYMENT, 
+        default="transfer"
+    )
+    due_date = models.DateField()
+    bank_account = models.CharField(max_length=34, null=True, blank=True)
     total_netto = models.DecimalField(max_digits=10, decimal_places=2)
     total_brutto = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
