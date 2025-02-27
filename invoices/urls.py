@@ -8,15 +8,12 @@ urlpatterns = [
     path("", views.invoices, name="invoices"),
     # /invoice/create
     path("create", views.invoiceForm, name="invoiceForm"),
-    # /invoice/save
-    # path("save", views.save, name="save"),
     # /invoice/5
     path("<int:invoice_id>/", views.invoiceDetail, name="invoiceDetail"),
      # /invoice/invoices/5/delete
     path("invoices/<int:invoice_id>/delete", views.invoiceDelete, name="invoiceDelete"),
     # /invoice/5/pdf
-    # path("<int:invoice_id>/pdf/", views.pdf, name="products"),
-
+    path("<int:invoice_id>/pdf/", views.pdf, name="products"),
     # /invoice/clients
     path("clients", views.clients, name="clients"),
     # /invoice/clients/create

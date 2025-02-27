@@ -15,7 +15,7 @@ class ClientForm(forms.ModelForm):
 class InvoiceForm(forms.ModelForm):
     class Meta:
         model = Invoice
-        fields = ['client']
+        fields = ['client', 'issue_date', 'sale_date', 'payment_method', 'due_date', 'bank_account']
 
 class InvoiceProductForm(forms.ModelForm):
     class Meta:

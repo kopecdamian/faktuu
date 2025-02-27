@@ -1,10 +1,13 @@
 from django.shortcuts import get_object_or_404, render
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, FileResponse
 from .models import Invoice, InvoiceCounter, Client, Product, InvoiceProduct
 from .forms import ProductForm, ClientForm, InvoiceForm, InvoiceProductFormSet
 from django.urls import reverse
 from datetime import datetime
 from django.contrib.auth.decorators import login_required
+import io
+from reportlab.pdfgen import canvas
+from reportlab.lib.pagesizes import A4
 
 # Create your views here.
 # Invoices
@@ -108,8 +111,38 @@ def invoiceDelete(request, invoice_id):
     return render(request, "invoices/invoiceDetail.html", {"invoice": invoice})
 
 # PDF
-# def pdf(request, invoice_id):
-#     return HttpResponse("Invoice download page.")
+@login_required()
+def pdf(request, invoice_id):
+    # Pobierz fakturę z bazy danych (przykładowe pobranie)
+    invoice = Invoice.objects.get(id=invoice_id)
+    products = invoice.products.all()
+    
+    # Bufor w pamięci do przechowywania PDF
+    buffer = io.BytesIO()
+    
+    # Tworzenie obiektu PDF
+    p = canvas.Canvas(buffer, pagesize=A4)
+    
+    # Dodanie nagłówka faktury
+    p.drawString(100, 800, f"Faktura nr: {invoice.invoice_number}")
+    p.drawString(100, 780, f"Data wystawienia: {invoice.issue_date}")
+    p.drawString(100, 760, f"Klient: {invoice.client.name}")
+    
+    # Dodanie produktów z faktury
+    y_position = 730
+    for product in products:
+        p.drawString(100, y_position, f"{product.name} - {product.quantity} x {product.price} PLN")
+        y_position -= 20  # Przesunięcie w dół dla kolejnych produktów
+    
+    # Zamknięcie dokumentu PDF
+    p.showPage()
+    p.save()
+    
+    # Przesunięcie wskaźnika na początek bufora
+    buffer.seek(0)
+    
+    # Zwrot pliku jako odpowiedzi HTTP do pobrania
+    return FileResponse(buffer, as_attachment=True, filename=f"faktura_{invoice.invoice_number}.pdf")
 
 # clients
 @login_required()
