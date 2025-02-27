@@ -5,11 +5,10 @@ from .forms import ProductForm, ClientForm, InvoiceForm, InvoiceProductFormSet
 from django.urls import reverse
 from datetime import datetime
 from django.contrib.auth.decorators import login_required
+from django.template.loader import get_template
 import io
-from reportlab.pdfgen import canvas
-from reportlab.lib.pagesizes import A4
+from xhtml2pdf import pisa
 
-# Create your views here.
 # Invoices
 @login_required()
 def invoices(request):
@@ -27,6 +26,8 @@ def invoiceForm(request):
         if form.is_valid():
             invoice = form.save(commit=False)
             invoice.total_netto = request.POST.get('totalNetto')
+            invoice.total_vat = request.POST.get('totalVat')
+            invoice.total_brutto = request.POST.get('totalBrutto')
             invoice = form.save()
             productsName = request.POST.getlist("productName[]")
             productsPrice = request.POST.getlist("productPrice[]")
@@ -57,9 +58,10 @@ def invoiceDetail(request, invoice_id):
         form = InvoiceForm(request.POST, instance=invoice)
         print(request.POST)
         if form.is_valid():
-            print('valid')
             invoice = form.save(commit=False)
             invoice.total_netto = request.POST.get('totalNetto')
+            invoice.total_vat = request.POST.get('totalVat')
+            invoice.total_brutto = request.POST.get('totalBrutto')
             invoice = form.save()
             id_existing_products = []
             id_updated_product = []
@@ -110,39 +112,28 @@ def invoiceDelete(request, invoice_id):
         return HttpResponseRedirect(reverse("invoices:invoices"))
     return render(request, "invoices/invoiceDetail.html", {"invoice": invoice})
 
-# PDF
+# Generate PDF
 @login_required()
-def pdf(request, invoice_id):
-    # Pobierz fakturę z bazy danych (przykładowe pobranie)
-    invoice = Invoice.objects.get(id=invoice_id)
+def generateInvoicePdf(request, invoice_id):
+    invoice = get_object_or_404(Invoice, id=invoice_id)
     products = invoice.products.all()
-    
-    # Bufor w pamięci do przechowywania PDF
-    buffer = io.BytesIO()
-    
-    # Tworzenie obiektu PDF
-    p = canvas.Canvas(buffer, pagesize=A4)
-    
-    # Dodanie nagłówka faktury
-    p.drawString(100, 800, f"Faktura nr: {invoice.invoice_number}")
-    p.drawString(100, 780, f"Data wystawienia: {invoice.issue_date}")
-    p.drawString(100, 760, f"Klient: {invoice.client.name}")
-    
-    # Dodanie produktów z faktury
-    y_position = 730
-    for product in products:
-        p.drawString(100, y_position, f"{product.name} - {product.quantity} x {product.price} PLN")
-        y_position -= 20  # Przesunięcie w dół dla kolejnych produktów
-    
-    # Zamknięcie dokumentu PDF
-    p.showPage()
-    p.save()
-    
-    # Przesunięcie wskaźnika na początek bufora
-    buffer.seek(0)
-    
-    # Zwrot pliku jako odpowiedzi HTTP do pobrania
-    return FileResponse(buffer, as_attachment=True, filename=f"faktura_{invoice.invoice_number}.pdf")
+
+    # get html template
+    template_path = "pdf/invoicePdf.html"
+    context = {"invoice": invoice, "products": products}
+    template = get_template(template_path)
+    html = template.render(context)
+
+    # issue with polish signs, the helpful font is Open Sans
+    # convert html to pdf
+    response = HttpResponse(content_type="application/pdf")
+    response["Content-Disposition"] = f'attachment; filename="faktura_{invoice.invoice_number}.pdf"'
+    pisa_status = pisa.CreatePDF(io.BytesIO(html.encode("UTF-8")), dest=response)
+
+    if pisa_status.err:
+        return HttpResponse("Błąd przy generowaniu PDF", status=500)
+
+    return response
 
 # clients
 @login_required()
