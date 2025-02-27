@@ -54,6 +54,7 @@ class Invoice(models.Model):
     due_date = models.DateField()
     bank_account = models.CharField(max_length=34, null=True, blank=True)
     total_netto = models.DecimalField(max_digits=10, decimal_places=2)
+    total_vat = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
     total_brutto = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     def save(self, *args, **kwargs):
