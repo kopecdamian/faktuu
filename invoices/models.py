@@ -58,17 +58,29 @@ class Invoice(models.Model):
     total_brutto = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     def save(self, *args, **kwargs):
+        # if invoice_number is not defined
         if not self.invoice_number: 
         # compare last invoice number with current date and create new invoice number
             current_year = datetime.now().year
             current_month = f"{datetime.now().month:02}"
-            old_invoice_number = InvoiceCounter.objects.filter(client = "Damian").first().highest_number
-            invoice_prefix, invoice_year, invoice_month, document_number = old_invoice_number.split("/")
-            if(int(invoice_year) == int(current_year) and current_month == invoice_month):
-                new_document_number = int(document_number) + 1
-                new_invoice_number = f"FV/{current_year}/{current_month}/{new_document_number}"
-            else:
+            # checking if exist a invoice number for the user
+            try:
+                old_invoice_number = InvoiceCounter.objects.get(client="Damian").highest_number
+            # if not, create new invoice number for the user in database
+            except InvoiceCounter.DoesNotExist:
                 new_invoice_number = f"FV/{current_year}/{current_month}/1"
+                InvoiceCounter.objects.create(
+                    client = 'Damian',
+                    highest_number = new_invoice_number
+                )
+            # if exist, generate a higher invoice number
+            else:
+                invoice_prefix, invoice_year, invoice_month, document_number = old_invoice_number.split("/")
+                if(int(invoice_year) == int(current_year) and current_month == invoice_month):
+                    new_document_number = int(document_number) + 1
+                    new_invoice_number = f"FV/{current_year}/{current_month}/{new_document_number}"
+                else:
+                    new_invoice_number = f"FV/{current_year}/{current_month}/1"
             
             # save new invoice number in database
             InvoiceCounter.objects.filter(client = "Damian").update(highest_number=new_invoice_number)
