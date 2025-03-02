@@ -12,6 +12,7 @@ class Client(models.Model):
     country = models.CharField(max_length=100, blank=True, null=True)
     phone_number = models.CharField(max_length=15, blank=True, null=True)
     email = models.EmailField(max_length=255, blank=True, null=True)
+    assigned_to = models.CharField(max_length=255)
     created_at = models.DateTimeField(auto_now_add=True)
     def __str__(self):
         return self.name
