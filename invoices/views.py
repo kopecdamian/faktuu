@@ -13,6 +13,7 @@ from xhtml2pdf import pisa
 @login_required()
 def invoices(request):
     all_invoices = Invoice.objects.all()
+    print(request.user)
     context = {
         "all_invoices": all_invoices,
     }
@@ -20,9 +21,9 @@ def invoices(request):
     
 # Create invoice
 @login_required()
-def invoiceForm(request):
+def invoiceCreate(request):
     if request.method == "POST":
-        form = InvoiceForm(request.POST)
+        form = InvoiceForm(request.POST, assignedTo=request.user)
         if form.is_valid():
             invoice = form.save(commit=False)
             invoice.total_netto = request.POST.get('totalNetto')
@@ -43,7 +44,7 @@ def invoiceForm(request):
                 )
         return HttpResponseRedirect(reverse("invoices:invoices"))
     else:
-        form = InvoiceForm()
+        form = InvoiceForm(assignedTo=request.user)
     return render(request, "invoices/invoiceForm.html", {"form": form})
 
 
@@ -55,7 +56,7 @@ def invoiceDetail(request, invoice_id):
     products = invoice.products.all()
     # update invoice data
     if request.method == "POST":
-        form = InvoiceForm(request.POST, instance=invoice)
+        form = InvoiceForm(request.POST, instance=invoice, assignedTo=request.user)
         print(request.POST)
         if form.is_valid():
             invoice = form.save(commit=False)
@@ -100,7 +101,7 @@ def invoiceDetail(request, invoice_id):
             return HttpResponseRedirect(reverse("invoices:invoices"))
     # show invoice data
     else:
-        form = InvoiceForm(instance=invoice)
+        form = InvoiceForm(instance=invoice, assignedTo=request.user)
     return render(request, "invoices/invoiceForm.html", {"form": form, "products":products, "invoice":invoice})
 
 # Delete Invoice
@@ -138,7 +139,7 @@ def generateInvoicePdf(request, invoice_id):
 # clients
 @login_required()
 def clients(request):
-    all_clients = Client.objects.all()
+    all_clients = Client.objects.filter(assigned_to=request.user)
     context = {
         "all_clients": all_clients,
     }
@@ -151,7 +152,9 @@ def clientform(request):
         form = ClientForm(request.POST)
         print(form)
         if form.is_valid():
-            form.save()
+            client = form.save(commit=False)
+            client.assigned_to = request.user
+            client = form.save()
             return HttpResponseRedirect(reverse("invoices:clients"))
     else:
         form = ClientForm()

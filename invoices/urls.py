@@ -7,7 +7,7 @@ urlpatterns = [
     # /invoices
     path("", views.invoices, name="invoices"),
     # /invoice/create
-    path("create", views.invoiceForm, name="invoiceForm"),
+    path("create", views.invoiceCreate, name="invoiceCreate"),
     # /invoice/5
     path("<int:invoice_id>/", views.invoiceDetail, name="invoiceDetail"),
      # /invoice/invoices/5/delete
