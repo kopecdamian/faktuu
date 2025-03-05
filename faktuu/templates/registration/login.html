@@ -2,6 +2,10 @@
 
 {% block title %}Logowanie{% endblock %}
 
+{% block navbar %}
+    <a href="{% url 'signup' %}" class="button">Zarejestruj</a>
+{% endblock %}
+
 {% block content %}
 <h2>Zaloguj się</h2>
 <form method="post">

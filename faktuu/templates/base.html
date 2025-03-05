@@ -4,10 +4,18 @@
 <head>
   <meta charset="utf-8">
   <title>{% block title %}Faktuu{% endblock %}</title>
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'home/styles.css' %}">
 </head>
 
 <body>
   <main>
+    <nav class="navbar">
+      <a href="{% url 'home' %}" class="app-name">Faktuu</a>
+      <ul class="nav-links">
+      {% block navbar %}{% endblock %}
+      </ul>
+  </nav>
     {% block content %}
     {% endblock %}
   </main>
