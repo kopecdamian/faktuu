@@ -21,6 +21,13 @@ body {
     display: flex;
 }
 
+.app-name {
+    font-size: 24px;
+    font-weight: bold;
+    color: black;
+    text-decoration: none;
+}
+
 .content {
     width: 100%;
     height: 100%;

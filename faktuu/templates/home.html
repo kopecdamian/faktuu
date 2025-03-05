@@ -2,17 +2,38 @@
 
 {% block title %}Faktuu{% endblock %}
 
-{% block content %}
-{% if user.is_authenticated %}
-Hi {{ user.username }}
+{% block navbar %}
+    {% if user.is_authenticated %}
     <form action="{% url 'logout' %}" method="post">
-        {% csrf_token %}
-        <button type="submit">Wyloguj</button>
+    {% csrf_token %}
+    <button type="submit" class="button">Wyloguj</button>
     </form>
-{% else %}
+    {% else %}
+    <a href="{% url 'login' %}" class="button">Zaloguj</a>
+    <a href="{% url 'signup' %}" class="button">Zarejestruj</a>
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+
+    <h1 class="title">Faktuu</h1>
+
+    <p class="description">
+        Twórz, zarządzaj i generuj faktury w prosty sposób! Szybkie wystawianie faktur i pełna kontrola nad Twoimi dokumentami.
+    </p>
+
+    <div class="advantages">
+        <div class="box">
+            <h3>Automatyzacja</h3>
+            <p>Nasza aplikacja sama numeruje faktury i ułatwia zarządzanie.</p>
+        </div>
+        <div class="box">
+            <h3>Szybkość</h3>
+            <p>Tworzenie faktur zajmuje tylko kilka sekund!</p>
+        </div>
+    </div>
     <p>Witaj na stronie Faktuu, czy chcesz dołączyć?</p>
     <a href="{% url 'login' %}">Log In</a>
     <a href="{% url 'signup' %}">Sign Up</a>
     <a href="{% url 'password_reset' %}">Resetuj hasło</a>
-{% endif %}
 {% endblock %}

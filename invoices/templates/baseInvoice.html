@@ -5,12 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Strona{% endblock %}</title>
     {% load static %}
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'invoices/styles.css' %}">
 </head>
 <body>
     <div class="container">
         <div class="sidebar">
-            <h1>FaktUU</h1>
+          <a href="{% url 'home' %}" class="app-name">Faktuu</a>
             <ul>
                 <li><a href="{% url 'invoices:invoices' %}" class="link">Faktury</a></li>
                 <li><a href="{% url 'invoices:clients' %}" class="link">Klienci</a></li>
