@@ -103,31 +103,36 @@ h1 {
 
 .grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 20px;
     padding: 20px;
 }
 
-.card {
+.clickable-card {
+    display: block;
+    text-decoration: none;
+    color: inherit;
     background: #fff;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     padding: 20px;
-    text-align: center;
+    /* max-width: 30%; */
+    text-align: left;
+    justify-content: flex-start;
     transition: transform 0.2s, box-shadow 0.2s;
 }
 
-.card:hover {
+.clickable-card:hover {
     transform: translateY(-5px);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-.card h2 {
+.clickable-card h2 {
     font-size: 1.5em;
     margin: 0 0 10px;
 }
 
-.card p {
+.clickable-card p {
     margin: 5px 0;
     color: #666;
 }

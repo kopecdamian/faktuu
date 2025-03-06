@@ -10,12 +10,10 @@
 {% block content %}
     <div class="grid">
         {% for invoice in all_invoices %}
-        <div class="card">
+        <a href="{% url 'invoices:invoiceDetail' invoice.id %}" class="clickable-card">
             <h2>{{ invoice.invoice_number }}</h2>
             <p>Klient: {{ invoice.client }}</p>
-            <p>Produkt: {{ invoice.product }}</p>
-            <a href="{% url 'invoices:invoiceDetail' invoice.id %}" class="btn">Zobacz szczegóły</a>
-        </div>
+        </a>
         {% empty %}
         <p>Brak faktur do wyświetlenia.</p>
         {% endfor %}
