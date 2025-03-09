@@ -146,6 +146,27 @@ def generateInvoicePdf(request, invoice_id):
             return HttpResponse("Błąd przy generowaniu PDF", status=500)
 
         return response
+    
+# Filter Invoices
+@login_required()
+def filterInvoices(request):
+    query = request.GET.get("query", "").strip()
+    if not query: 
+        invoices = Invoice.objects.filter(assigned_to=request.user)
+    else: 
+        invoices = Invoice.objects.filter(
+            Q(assigned_to=request.user) & (
+                Q(invoice_number__icontains=query) |
+                Q(client__name__icontains=query)
+            )
+        )
+
+    print(invoices)
+    
+    invoice_data = list(invoices.values("id", "invoice_number", "client__name"))
+    print(invoice_data)
+    
+    return JsonResponse({"invoices": invoice_data})
 
 # clients
 @login_required()
@@ -199,6 +220,25 @@ def clientDelete(request, client_id):
             client.delete()
             return HttpResponseRedirect(reverse("invoices:clients"))
         return render(request, "invoices/clientDetail.html", {"client": client})
+    
+# Filter Clients
+@login_required()
+def filterClients(request):
+    query = request.GET.get("query", "").strip()
+    print(query)
+    if not query: 
+        clients = Client.objects.filter(assigned_to=request.user)
+    else: 
+        clients = Client.objects.filter(
+            Q(assigned_to=request.user) & (
+                Q(name__icontains=query) |
+                Q(nip_number__icontains=query)
+            )
+        )
+    
+    client_data = list(clients.values("id", "name", "nip_number"))
+    
+    return JsonResponse({"clients": client_data})
 
 # Products
 @login_required()

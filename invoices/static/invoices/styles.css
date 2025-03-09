@@ -106,6 +106,7 @@ h1 {
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 20px;
     padding: 20px;
+    width: 100%;
 }
 
 .clickable-card {
@@ -189,6 +190,12 @@ h1 {
 
 .detail-card .btn:hover {
     background-color: #0056b3;
+}
+
+.empty {
+    border: 1px solid black;
+    width: 100%;
+    width: 100%;
 }
 
 fieldset {
