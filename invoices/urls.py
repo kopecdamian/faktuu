@@ -14,6 +14,8 @@ urlpatterns = [
     path("invoices/<int:invoice_id>/delete", views.invoiceDelete, name="invoiceDelete"),
     # /invoices/5/pdf
     path("<int:invoice_id>/pdf/", views.generateInvoicePdf, name="generateInvoicePdf"),
+    # /invoices/filter-invoices
+    path("filter-invoices/", views.filterInvoices, name="filterInvoices"),
 
     # /invoices/clients
     path("clients", views.clients, name="clients"),
@@ -23,6 +25,8 @@ urlpatterns = [
     path("clients/<int:client_id>/", views.clientDetail, name="clientDetail"),
     # /invoice/clients/5/delete
     path("clients/<int:client_id>/delete", views.clientDelete, name="clientDelete"),
+    # /invoices/clients/filter-clients
+    path("clients/filter-clients/", views.filterClients, name="filterClients"),
 
     # /invoices/products
     path("products", views.products, name="products"),

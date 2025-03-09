@@ -8,15 +8,70 @@
 
 
 {% block content %}
-    <div class="grid">
+    <input type="text" id="searchInput" name="searchInput" placeholder="Wyszukaj faktury...">
+    <div class="grid" id="productGrid">
         {% for invoice in all_invoices %}
         <a href="{% url 'invoices:invoiceDetail' invoice.id %}" class="clickable-card">
             <h2>{{ invoice.invoice_number }}</h2>
-            <p>Klient: {{ invoice.client }}</p>
+            <p>{{ invoice.client }}</p>
         </a>
-        {% empty %}
-        <p>Brak faktur do wyświetlenia.</p>
         {% endfor %}
     </div>
+    {% if not all_invoices %}
+        <p>Brak faktur.</p>
+    {% endif %}
+{% endblock %}
+        
+{% block script %}
+<script>
+    let timeout;
+    const searchInput = document.getElementById("searchInput");
+    searchInput.addEventListener("input", function (event) {
+        clearTimeout(timeout);
+
+        timeout = setTimeout(() => {
+            let query = event.target.value;
+            fetch(`/invoices/filter-invoices/?query=${query}`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRFToken": getCSRFToken()
+                }
+            })
+            
+            .then(response => response.json())
+            .then(data => {
+                let productGrid = document.getElementById("productGrid");
+                productGrid.innerHTML = "";
+
+                if (data.invoices.length > 0) {
+                    data.invoices.forEach(invoice => {
+                        let productCard = document.createElement("a");
+                        productCard.href = `${invoice.id}`;
+                        productCard.classList.add("clickable-card");
+
+                        let h2 = document.createElement("h2");
+                        h2.textContent = invoice.invoice_number;
+
+                        let p = document.createElement("p");
+                        p.textContent = `${invoice.client__name}`;
+
+                        productCard.appendChild(h2);
+                        productCard.appendChild(p);
+                        productGrid.appendChild(productCard);
+                    });
+                } else {
+                    productGrid.innerHTML = "<p>Brak wyników.</p>";
+                }
+            })
+            .catch(error => console.error("Błąd:", error));
+
+        }, 500);
+    })
+
+    function getCSRFToken() {
+        return document.querySelector('[name=csrfmiddlewaretoken]').value;
+    }
+</script>
 {% endblock %}
         

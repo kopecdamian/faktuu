@@ -14,11 +14,11 @@
                 <h2>{{ product.name }}</h2>
                 <p>{{ product.price_netto }} PLN</p>
         </a>    
-       
-        {% empty %}
-        <p>Brak produktów do wyświetlenia.</p>
         {% endfor %}
     </div>
+    {% if not all_products %}
+        <p>Brak produktów.</p>
+    {% endif %}
 {% endblock %}
 
 {% block script %}
