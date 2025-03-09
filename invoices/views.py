@@ -1,11 +1,12 @@
 from django.shortcuts import get_object_or_404, render
-from django.http import HttpResponse, HttpResponseRedirect, FileResponse, HttpResponseForbidden
+from django.http import HttpResponse, HttpResponseRedirect, FileResponse, HttpResponseForbidden, JsonResponse
 from .models import Invoice, InvoiceCounter, Client, Product, InvoiceProduct
 from .forms import ProductForm, ClientForm, InvoiceForm, InvoiceProductFormSet
 from django.urls import reverse
 from datetime import datetime
 from django.contrib.auth.decorators import login_required
 from django.template.loader import get_template
+from django.db.models import Q
 import io
 from xhtml2pdf import pisa
 
@@ -252,3 +253,22 @@ def productDelete(request, product_id):
             product.delete()
             return HttpResponseRedirect(reverse("invoices:products"))
         return render(request, "invoices/productDetail.html", {"product": product})
+
+# Filter Products
+@login_required()
+def filterProducts(request):
+    query = request.GET.get("query", "").strip()
+    print(query)
+    if not query: 
+        products = Product.objects.filter(assigned_to=request.user)
+    else: 
+        products = Product.objects.filter(
+            Q(assigned_to=request.user) & (
+                Q(name__icontains=query) |
+                Q(price_netto__icontains=query)
+            )
+        )
+    
+    product_data = list(products.values("id", "name", "price_netto"))
+    
+    return JsonResponse({"products": product_data})

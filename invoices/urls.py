@@ -6,30 +6,32 @@ app_name = "invoices"
 urlpatterns = [
     # /invoices
     path("", views.invoices, name="invoices"),
-    # /invoice/create
+    # /invoices/create
     path("create", views.invoiceCreate, name="invoiceCreate"),
-    # /invoice/5
+    # /invoices/5
     path("<int:invoice_id>/", views.invoiceDetail, name="invoiceDetail"),
-     # /invoice/invoices/5/delete
+     # /invoices/invoices/5/delete
     path("invoices/<int:invoice_id>/delete", views.invoiceDelete, name="invoiceDelete"),
-    # /invoice/5/pdf
+    # /invoices/5/pdf
     path("<int:invoice_id>/pdf/", views.generateInvoicePdf, name="generateInvoicePdf"),
 
-    # /invoice/clients
+    # /invoices/clients
     path("clients", views.clients, name="clients"),
-    # /invoice/clients/create
+    # /invoices/clients/create
     path("clients/create", views.clientForm, name="clientForm"),
     # /invoice/clients/5
     path("clients/<int:client_id>/", views.clientDetail, name="clientDetail"),
     # /invoice/clients/5/delete
     path("clients/<int:client_id>/delete", views.clientDelete, name="clientDelete"),
 
-    # /invoice/products
+    # /invoices/products
     path("products", views.products, name="products"),
-    # /invoice/products/create
+    # /invoices/products/create
     path("products/create", views.productForm, name="productForm"),
-    # /invoice/products/5
+    # /invoices/products/5
     path("products/<int:product_id>/", views.productDetail, name="productDetail"),
-    # /invoice/products/5/delete
+    # /invoices/products/5/delete
     path("products/<int:product_id>/delete", views.productDelete, name="productDelete"),
+    # /invoices/products/filter-products
+    path("products/filter-products/", views.filterProducts, name="filterProducts"),
 ]
