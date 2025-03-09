@@ -7,16 +7,70 @@
 {% block button %}<a href="{% url 'invoices:productForm' %}" class="btn">Dodaj Produkt</a>{% endblock %}
 
 {% block content %}
-    <div class="grid">
+    <input type="text" id="searchInput" name="searchInput" placeholder="Wyszukaj produkty...">
+    <div class="grid" id="productGrid">
         {% for product in all_products %}
         <a href="{% url 'invoices:productDetail' product.id %}" class="clickable-card">
                 <h2>{{ product.name }}</h2>
                 <p>{{ product.price_netto }} PLN</p>
-        </a>
+        </a>    
        
         {% empty %}
         <p>Brak produktów do wyświetlenia.</p>
         {% endfor %}
     </div>
+{% endblock %}
+
+{% block script %}
+<script>
+    let timeout;
+    const searchInput = document.getElementById("searchInput");
+    searchInput.addEventListener("input", function (event) {
+        clearTimeout(timeout);
+
+        timeout = setTimeout(() => {
+            let query = event.target.value;
+            fetch(`/invoices/products/filter-products/?query=${query}`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRFToken": getCSRFToken()
+                }
+            })
+            
+            .then(response => response.json())
+            .then(data => {
+                let productGrid = document.getElementById("productGrid");
+                productGrid.innerHTML = "";
+
+                if (data.products.length > 0) {
+                    data.products.forEach(product => {
+                        let productCard = document.createElement("a");
+                        productCard.href = `products/${product.id}`;
+                        productCard.classList.add("clickable-card");
+
+                        let h2 = document.createElement("h2");
+                        h2.textContent = product.name;
+
+                        let p = document.createElement("p");
+                        p.textContent = `${product.price_netto} PLN`;
+
+                        productCard.appendChild(h2);
+                        productCard.appendChild(p);
+                        productGrid.appendChild(productCard);
+                    });
+                } else {
+                    productGrid.innerHTML = "<p>Brak wyników.</p>";
+                }
+            })
+            .catch(error => console.error("Błąd:", error));
+
+        }, 500);
+    })
+
+    function getCSRFToken() {
+        return document.querySelector('[name=csrfmiddlewaretoken]').value;
+    }
+</script>
 {% endblock %}
         
