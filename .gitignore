@@ -35,5 +35,7 @@ media/
 .DS_Store
 Thumbs.db
 
+.env
+
 *.sh
 migrations/
