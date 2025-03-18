@@ -20,7 +20,7 @@
     {% if invoice.id %}
         <form method="post" action="{% url 'invoices:invoiceDelete' invoice.id %}">
             {% csrf_token %}
-            <button type="submit">Usuń fakturę</button>
+            <button class="btn btn-primary" type="submit">Usuń fakturę</button>
         </form>
     {% else %}
         
@@ -29,7 +29,7 @@
 {% endblock %}
 
 {% block content %}
-    <form method="post">
+    <form method="post" class="form-container">
         {% csrf_token %}
         {{ form.as_p }} 
         <input id="totalNettoInput" type="hidden" name="totalNetto" value="">
