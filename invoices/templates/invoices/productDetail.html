@@ -5,18 +5,36 @@
 {% block button %}
     <form method="post" action="{% url 'invoices:productDelete' product.id %}">
         {% csrf_token %}
-        <button type="submit">Usuń produkt</button>
+        <button class="btn btn-primary" type="submit">Usuń produkt</button>
     </form>
 {% endblock %}
 
 {% block titlePage %}{{product.name}}{% endblock %}
 
 {% block content %}
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }} 
+<form method="post" class="form-container">
+    {% csrf_token %}
+    <div class="form-group">
+        <label for="{{ form.name.id_for_label }}">{{ form.name.label }}</label>
+        {{ form.name }}
+    </div>
+
+    <div class="form-group">
+        <label for="{{ form.price_netto.id_for_label }}">{{ form.price_netto.label }}</label>
+        {{ form.price_netto }}
+    </div>
+
+    <div class="form-group">
+        <label for="{{ form.tax.id_for_label }}">{{ form.tax.label }}</label>
+        {{ form.tax }}
+    </div>
+
+    <div class="form-group">
+        <label for="{{ form.price_brutto.id_for_label }}">{{ form.price_brutto.label }}</label>
+        {{ form.price_brutto }}
+    </div>
+
         <button type="submit" class="btn btn-primary">Zapisz produkt</button>
-        <!-- <h1><strong>Nazwa Produktu:</strong> {{ product.name }}</h1> -->
-        <a href="{% url 'invoices:products' %}" class="btn">Powrót do listy</a>
+        <a href="{% url 'invoices:products' %}" class="btn btn-secondary">Powrót do listy</a>
     </form>
 {% endblock %}

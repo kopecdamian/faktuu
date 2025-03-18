@@ -150,11 +150,6 @@ h1 {
     transition: background-color 0.3s;
 }
 
-.btn:hover {
-    background-color: #0056b3;
-}
-
-/* Style specyficzne dla strony szczegółów */
 .detail-card {
     background: #fff;
     border-radius: 8px;
@@ -222,6 +217,7 @@ input[type="text"]:focus {
     outline: none;
 }
 
+/* Button */
 
 .button-group {
     display: flex;
@@ -241,24 +237,27 @@ button, a {
     transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
+a.btn-primary,
 button.btn-primary {
     background-color: rgb(255, 216, 41);
     color: black;
 }
 
+a.btn-primary:hover,
 button.btn-primary:hover {
-    background-color: #0056b3;
-    transform: scale(1.05);
+    background-color: rgb(255, 230, 100);;
+    /* transform: scale(1.05); */
 }
 
-a.btn-secondary {
-    background-color: #6c757d;
+a.btn-secondary,
+button.btn-secondary {
+    background-color: white;
     color: black;
 }
 
-a.btn-secondary:hover {
-    background-color: #5a6268;
-    transform: scale(1.05);
+a.btn-secondary:hover,
+button.btn-secondary:hover {
+    background-color:  rgb(255, 230, 100);
 }
 
 .formstyle {
@@ -275,16 +274,18 @@ a.btn-secondary:hover {
     position: relative;
     display: inline-block;
     cursor: pointer;
-  }
+}
   
-  .username {
+.username {
     padding: 10px;
     font-weight: bold;
     cursor: pointer;
-  }
+}
+
+/* Dropdown Menu */
   
-  .dropdown-menu {
-    display: none; /* Ukryte domyślnie */
+.dropdown-menu {
+    display: none;
     position: absolute;
     top: 50px;
     right: 20px;
@@ -295,14 +296,14 @@ a.btn-secondary:hover {
     padding: 0;
     margin: 0;
     z-index: 1000;
-  }
+}
   
-  .dropdown-menu li {
+.dropdown-menu li {
     border-bottom: 1px solid #eee;
-  }
+}
   
-  .dropdown-menu li a,
-  .dropdown-menu li form button.logout-button {
+.dropdown-menu li a,
+.dropdown-menu li form button.logout-button {
     display: block;
     padding: 10px;
     text-decoration: none;
@@ -312,9 +313,48 @@ a.btn-secondary:hover {
     width: 100%;
     text-align: left;
     cursor: pointer;
-  }
+}
   
-  .dropdown-menu li a:hover,
-  .dropdown-menu li form button.logout-button:hover {
+.dropdown-menu li a:hover,
+.dropdown-menu li form button.logout-button:hover {
     background-color: #f1f1f1;
-  }
+}
+
+/* form fields */
+
+.form-container {
+    background: white;
+    padding: 20px;
+    margin: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    /* width: 350px; */
+    /* height: 100%; */
+    text-align: center;
+}
+
+.form-group {
+    margin-bottom: 15px;
+    text-align: left;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #555;
+}
+
+.custom-input {
+    width: 100% !important;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    transition: 0.3s;
+}
+
+.custom-input:focus {
+    border-color: rgb(255, 216, 41);
+    outline: none;
+}
