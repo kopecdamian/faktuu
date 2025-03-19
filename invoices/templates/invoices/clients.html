@@ -46,7 +46,7 @@
                 if (data.clients.length > 0) {
                     data.clients.forEach(client => {
                         let productCard = document.createElement("a");
-                        productCard.href = `products/clients/${client.id}`;
+                        productCard.href = `/invoices/clients/${client.id}`;
                         productCard.classList.add("clickable-card");
 
                         let h2 = document.createElement("h2");
