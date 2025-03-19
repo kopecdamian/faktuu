@@ -1,0 +1,16 @@
+{% extends 'baseInvoice.html' %}
+
+{% block title %}{{client.name}}{% endblock %}
+
+{% block button %}{% endblock %}
+
+{% block titlePage %}Moje konto{% endblock %}
+
+{% block content %}
+<form method="post" class="form-container">
+    {% csrf_token %}
+    {{ form.as_p }}
+
+    <button type="submit" class="btn btn-primary">Zapisz dane</button>
+</form>
+{% endblock %}

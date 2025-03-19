@@ -2,6 +2,7 @@ from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.contrib.auth.models import User
 from datetime import datetime
+from django.conf import settings
 
 # Table: Clients
 class Client(models.Model):
@@ -13,7 +14,7 @@ class Client(models.Model):
     country = models.CharField(max_length=100, blank=True, null=True)
     phone_number = models.CharField(max_length=15, blank=True, null=True)
     email = models.EmailField(max_length=255, blank=True, null=True)
-    assigned_to = models.ForeignKey(User, on_delete=models.CASCADE)
+    assigned_to = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     def __str__(self):
         return self.name
@@ -35,7 +36,7 @@ class Product(models.Model):
         default=23
     )
     price_brutto = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
-    assigned_to = models.ForeignKey(User, on_delete=models.CASCADE)
+    assigned_to = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     def __str__(self):
         return self.name
@@ -65,7 +66,7 @@ class Invoice(models.Model):
     total_netto = models.DecimalField(max_digits=10, decimal_places=2)
     total_vat = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
     total_brutto = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
-    assigned_to = models.ForeignKey(User, on_delete=models.CASCADE)
+    assigned_to = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def save(self, *args, user=None, **kwargs):
@@ -81,7 +82,7 @@ class Invoice(models.Model):
             except InvoiceCounter.DoesNotExist:
                 new_invoice_number = f"FV/{current_year}/{current_month}/1"
                 InvoiceCounter.objects.create(
-                    user = user,
+                    user = settings.AUTH_USER_MODEL,
                     highest_number = new_invoice_number
                 )
             # if exist, generate a higher invoice number
@@ -124,7 +125,10 @@ class InvoiceProduct(models.Model):
     
 # Table: Highest Invoice Number
 class InvoiceCounter(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     highest_number = models.CharField(max_length=50)
     def __str__(self):
         return f"{self.user.username}: {self.highest_number}"
+    
+
+
