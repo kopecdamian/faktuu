@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .forms import CustomUserCreationForm
+from .forms import CustomUserCreationForm, CustomUserForm
 from django.contrib.auth.models import User
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.auth import get_user_model
@@ -64,3 +64,13 @@ def activate(request, uidb64, token):
         return redirect("login") 
     else:
         return HttpResponse("Nieprawidłowy link aktywacyjny", status=400)
+    
+# user account settings
+def accountSettings(request):
+    if request.method == "POST":
+        form = CustomUserForm(request.POST, instance=request.user)  
+        if form.is_valid():
+            form.save()
+    else:
+        form = CustomUserForm(instance=request.user)
+    return render(request, "account_settings.html", {"form": form})
