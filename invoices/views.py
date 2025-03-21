@@ -31,6 +31,7 @@ def invoiceCreate(request):
             invoice.total_vat = request.POST.get('totalVat')
             invoice.total_brutto = request.POST.get('totalBrutto')
             invoice.assigned_to = request.user
+            print(request.user)
             invoice.save(user=request.user)
             productsName = request.POST.getlist("productName[]")
             productsPrice = request.POST.getlist("productPrice[]")
