@@ -1,138 +1,166 @@
 {% extends 'baseInvoice.html' %}
 
 {% block title %}
-    {% if invoice.invoice_number %}
-        {{invoice.invoice_number}}
-    {% else %}
-        Dodaj Fakturę Sprzedazy
-    {% endif %}
+{% if invoice.invoice_number %}
+{{invoice.invoice_number}}
+{% else %}
+Dodaj Fakturę Sprzedazy
+{% endif %}
 {% endblock %}
 
 {% block titlePage %}
-    {% if invoice.invoice_number %}
-        {{invoice.invoice_number}}
-    {% else %}
-        Dodaj Fakturę Sprzedazy
-    {% endif %}
+{% if invoice.invoice_number %}
+{{invoice.invoice_number}}
+{% else %}
+Dodaj Fakturę Sprzedazy
+{% endif %}
 {% endblock %}
 
 {% block button %}
-    {% if invoice.id %}
-        <form method="post" action="{% url 'invoices:invoiceDelete' invoice.id %}">
-            {% csrf_token %}
-            <button class="btn btn-primary" type="submit">Usuń fakturę</button>
-        </form>
-    {% else %}
-        
-    {% endif %}
-    
+{% if invoice.id %}
+<form method="post" action="{% url 'invoices:invoiceDelete' invoice.id %}">
+    {% csrf_token %}
+    <button class="btn btn-primary" type="submit">Usuń fakturę</button>
+</form>
+{% else %}
+
+{% endif %}
+
 {% endblock %}
 
 {% block content %}
-    <form method="post" class="form-container">
-        {% csrf_token %}
-        {{ form.as_p }} 
-        <input id="totalNettoInput" type="hidden" name="totalNetto" value="">
-        <input id="totalVatInput" type="hidden" name="totalVat" value="">
-        <input id="totalBruttoInput" type="hidden" name="totalBrutto" value="">
-        <div id="product-container">
-            {% for product in products %}
-                <div class="product-entry" data-index="{{ forloop.counter0 }}">
-                    <input type="hidden" name="productId[]" value={{product.id}}>
-                    <label>Nazwa produktu:</label>
-                    <input type="text" name="productName[]"placeholder="Nazwa" value={{product.name}}>
-
-                    <label>Ilość:</label>
-                    <input type="number" class="productQuantity" name="productQuantity[]" placeholder="Ilość" value={{product.quantity}}>
-
-                    <label>VAT:</label>
-                    <select id="tax" class="productTax" name="productTax[]">
-                        <option value="23" {% if product.tax == 23 %}selected{% endif %}>23%</option>
-                        <option value="8" {% if product.tax == 8 %}selected{% endif %}>8%</option>
-                        <option value="7" {% if product.tax == 7 %}selected{% endif %}>7%</option>
-                        <option value="5" {% if product.tax == 5 %}selected{% endif %}>5%</option>
-                        <option value="4" {% if product.tax == 4 %}selected{% endif %}>4%</option>
-                        <option value="0" {% if product.tax == 0 %}selected{% endif %}>0%</option>
-                    </select>
-        
-                    <label>Cena:</label>
-                    <input type="number" class="productPrice" name="productPrice[]" placeholder="Cena" value={{product.price}}>
-
-                    <button id="remove-product-{{ forloop.counter0 }}" type="button" class="btn btn-primary">Usuń produkt</button>
-                </div>
-            {% empty %}
-                
-            {% endfor %}
-        </div>
-        <button id="add-product" type="button" class="btn btn-primary">Dodaj produkt</button>
-        <button type="submit" class="btn btn-primary">Zapisz fakturę</button>
-        <a href="{% url 'invoices:invoices' %}" class="btn btn-secondary">Anuluj</a>
-    </form>
-    <div class="bottombar">
-        <p>Netto: <span id="totalNetto">0.00</span> PLN</p>
-        <p>VAT: <span id="totalVat">0.00</span> PLN</p>
-        <p>Suma: <span id="totalBrutto">0.00</span> PLN</p>
+<form method="post" class="form-container">
+    {% csrf_token %}
+    <div class="form-group">
+        <label for="{{ form.client.id_for_label }}">{{ form.client.label }}</label>
+        {{ form.client }}
     </div>
+
+    <div class="form-group">
+        <label for="{{ form.issue_date.id_for_label }}">{{ form.issue_date.label }}</label>
+        {{ form.issue_date }}
+    </div>
+
+    <div class="form-group">
+        <label for="{{ form.sale_date.id_for_label }}">{{ form.sale_date.label }}</label>
+        {{ form.sale_date }}
+    </div>
+
+    <div class="form-group">
+        <label for="{{ form.payment_method.id_for_label }}">{{ form.payment_method.label }}</label>
+        {{ form.payment_method }}
+    </div>
+    <div class="form-group">
+        <label for="{{ form.due_date.id_for_label }}">{{ form.due_date.label }}</label>
+        {{ form.due_date }}
+    </div>
+    <div class="form-group">
+        <label for="{{ form.bank_account.id_for_label }}">{{ form.bank_account.label }}</label>
+        {{ form.bank_account }}
+    </div>
+    <input id="totalNettoInput" type="hidden" name="totalNetto" value="">
+    <input id="totalVatInput" type="hidden" name="totalVat" value="">
+    <input id="totalBruttoInput" type="hidden" name="totalBrutto" value="">
+    <div id="product-container">
+        {% for product in products %}
+        <div class="product-entry" data-index="{{ forloop.counter0 }}">
+            <input type="hidden" name="productId[]" value={{product.id}}>
+            <label>Nazwa produktu:</label>
+            <input type="text" name="productName[]" placeholder="Nazwa" value={{product.name}}>
+
+            <label>Ilość:</label>
+            <input type="number" class="productQuantity" name="productQuantity[]" placeholder="Ilość"
+                value={{product.quantity}}>
+
+            <label>VAT:</label>
+            <select id="tax" class="productTax" name="productTax[]">
+                <option value="23" {% if product.tax == 23 %}selected{% endif %}>23%</option>
+                <option value="8" {% if product.tax == 8 %}selected{% endif %}>8%</option>
+                <option value="7" {% if product.tax == 7 %}selected{% endif %}>7%</option>
+                <option value="5" {% if product.tax == 5 %}selected{% endif %}>5%</option>
+                <option value="4" {% if product.tax == 4 %}selected{% endif %}>4%</option>
+                <option value="0" {% if product.tax == 0 %}selected{% endif %}>0%</option>
+            </select>
+
+            <label>Cena:</label>
+            <input type="number" class="productPrice" name="productPrice[]" placeholder="Cena" value={{product.price}}>
+
+            <button id="remove-product-{{ forloop.counter0 }}" type="button" class="btn btn-primary">Usuń
+                produkt</button>
+        </div>
+        {% empty %}
+
+        {% endfor %}
+    </div>
+    <button id="add-product" type="button" class="btn btn-primary">Dodaj produkt</button>
+    <button type="submit" class="btn btn-primary">Zapisz fakturę</button>
+    <a href="{% url 'invoices:invoices' %}" class="btn btn-secondary">Anuluj</a>
+</form>
+<div class="bottombar">
+    <p>Netto: <span id="totalNetto">0.00</span> PLN</p>
+    <p>VAT: <span id="totalVat">0.00</span> PLN</p>
+    <p>Suma: <span id="totalBrutto">0.00</span> PLN</p>
+</div>
 {% endblock %}
 
 {% block script %}
-    <script>
-        let maxIndex = 0;
-        // get highest product index
-        let elements = document.querySelectorAll("[data-index]");
-        elements.forEach(element => {
-            let index = parseInt(element.dataset.index);
-            if (index > maxIndex) {
-                maxIndex = index;
-            }
-        });
-
-        // calculate sum of price of all products
-        function calculateTotal() {
-            let totalNetto = 0;
-            let totalVat = 0;
-            let totalBrutto = 0;
-            const prices = document.querySelectorAll(".productPrice");
-            const vats = document.querySelectorAll(".productTax");
-            const quantities = document.querySelectorAll(".productQuantity");
-
-            prices.forEach((priceInput, index) => {
-                const price = parseFloat(priceInput.value);
-                const tax = parseInt(vats[index].value);
-                const quantity = parseInt(quantities[index].value);
-
-                if (!isNaN(price) && !isNaN(quantity)) {
-                    const productTotal = price * quantity;
-                    const vatTotal = price * quantity * tax/100;
-                    totalNetto += productTotal;
-                    totalVat += vatTotal;
-                    totalBrutto += productTotal + vatTotal;
-                }
-            })
-
-
-            document.getElementById("totalNetto").textContent = totalNetto.toFixed(2);
-            document.getElementById("totalVat").textContent = totalVat.toFixed(2);
-            document.getElementById("totalBrutto").textContent = totalBrutto.toFixed(2);
-
-            document.getElementById("totalNettoInput").value = totalNetto.toFixed(2);
-            document.getElementById("totalVatInput").value = totalVat.toFixed(2);
-            document.getElementById("totalBruttoInput").value = totalBrutto.toFixed(2);
+<script>
+    let maxIndex = 0;
+    // get highest product index
+    let elements = document.querySelectorAll("[data-index]");
+    elements.forEach(element => {
+        let index = parseInt(element.dataset.index);
+        if (index > maxIndex) {
+            maxIndex = index;
         }
+    });
 
-        calculateTotal();
+    // calculate sum of price of all products
+    function calculateTotal() {
+        let totalNetto = 0;
+        let totalVat = 0;
+        let totalBrutto = 0;
+        const prices = document.querySelectorAll(".productPrice");
+        const vats = document.querySelectorAll(".productTax");
+        const quantities = document.querySelectorAll(".productQuantity");
 
-        // add div with new product
-        document.getElementById("add-product").addEventListener("click", function (event) {
-            event.preventDefault();
-            maxIndex = maxIndex + 1;
-            console.log(maxIndex)
-            let container = document.getElementById("product-container");
+        prices.forEach((priceInput, index) => {
+            const price = parseFloat(priceInput.value);
+            const tax = parseInt(vats[index].value);
+            const quantity = parseInt(quantities[index].value);
 
-            let newProduct = document.createElement("div");
-            newProduct.classList.add("product-item");
+            if (!isNaN(price) && !isNaN(quantity)) {
+                const productTotal = price * quantity;
+                const vatTotal = price * quantity * tax / 100;
+                totalNetto += productTotal;
+                totalVat += vatTotal;
+                totalBrutto += productTotal + vatTotal;
+            }
+        })
 
-            newProduct.innerHTML = `
+
+        document.getElementById("totalNetto").textContent = totalNetto.toFixed(2);
+        document.getElementById("totalVat").textContent = totalVat.toFixed(2);
+        document.getElementById("totalBrutto").textContent = totalBrutto.toFixed(2);
+
+        document.getElementById("totalNettoInput").value = totalNetto.toFixed(2);
+        document.getElementById("totalVatInput").value = totalVat.toFixed(2);
+        document.getElementById("totalBruttoInput").value = totalBrutto.toFixed(2);
+    }
+
+    calculateTotal();
+
+    // add div with new product
+    document.getElementById("add-product").addEventListener("click", function (event) {
+        event.preventDefault();
+        maxIndex = maxIndex + 1;
+        console.log(maxIndex)
+        let container = document.getElementById("product-container");
+
+        let newProduct = document.createElement("div");
+        newProduct.classList.add("product-item");
+
+        newProduct.innerHTML = `
             <div class="product-entry" data-index="${maxIndex}">
                 <input type="hidden" name="productId[]" value="">
                 <label>Nazwa produktu:</label>
@@ -158,30 +186,31 @@
             </div>
             `;
 
-            container.appendChild(newProduct);
-        })
+        container.appendChild(newProduct);
+    })
 
-        // delete div with product
-        document.getElementById("product-container").addEventListener("click", function (event) {
-            if (event.target) {
-                let productId = event.target.id.replace("remove-product-", ""); 
-                let productEntry = document.querySelector(`.product-entry[data-index='${productId}']`);  
+    // delete div with product
+    document.getElementById("product-container").addEventListener("click", function (event) {
+        if (event.target) {
+            let productId = event.target.id.replace("remove-product-", "");
+            let productEntry = document.querySelector(`.product-entry[data-index='${productId}']`);
 
-                if (productEntry) {
-                    productEntry.remove();
-                }
+            if (productEntry) {
+                productEntry.remove();
             }
-        });
+        }
+    });
 
-        // Event delegation
-        document.getElementById("product-container").addEventListener("input", function(event) {
-            if (event.target.classList.contains("productPrice") || event.target.classList.contains("productQuantity") || event.target.classList.contains("productTax")) {
-                calculateTotal();
-            }
-        });
+    // Event delegation
+    document.getElementById("product-container").addEventListener("input", function (event) {
+        if (event.target.classList.contains("productPrice") || event.target.classList.contains(
+                "productQuantity") || event.target.classList.contains("productTax")) {
+            calculateTotal();
+        }
+    });
 
-        document.querySelectorAll(".productPrice, .productQuantity, .productTax").forEach(item => {
-            item.addEventListener("input", calculateTotal);
-        })
-    </script>
+    document.querySelectorAll(".productPrice, .productQuantity, .productTax").forEach(item => {
+        item.addEventListener("input", calculateTotal);
+    })
+</script>
 {% endblock %}

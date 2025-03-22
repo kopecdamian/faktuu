@@ -14,9 +14,9 @@ class ProductForm(forms.ModelForm):
         }
         widgets = {
             'name': forms.TextInput(attrs={'class': 'custom-input', 'placeholder': 'Podaj nazwę produktu'}),
-            'price_netto': forms.NumberInput(attrs={'class': 'custom-input', 'placeholder': 'Cena netto'}),
-            'tax': forms.NumberInput(attrs={'class': 'custom-input', 'placeholder': 'Podatek VAT'}),
-            'price_brutto': forms.NumberInput(attrs={'class': 'custom-input', 'placeholder': 'Cena brutto'}),
+            'price_netto': forms.TextInput(attrs={'class': 'custom-input', 'placeholder': 'Cena netto'}),
+            'tax': forms.TextInput(attrs={'class': 'custom-input', 'placeholder': 'Podatek VAT'}),
+            'price_brutto': forms.TextInput(attrs={'class': 'custom-input', 'placeholder': 'Cena brutto'}),
         }
 
 class ClientForm(forms.ModelForm):
@@ -48,6 +48,22 @@ class InvoiceForm(forms.ModelForm):
     class Meta:
         model = Invoice
         fields = ['client', 'issue_date', 'sale_date', 'payment_method', 'due_date', 'bank_account']
+        labels = {
+            "client":  "Nazwa klienta",
+            "issue_date": "Data wydania",
+            "sale_date": "Data sprzedazy",
+            "payment_method": "Sposób płatnośści",
+            "due_date": "Termin płatności",
+            "bank_account": "Numer bankowy"
+        }
+        widgets = {
+            'client': forms.Select(),
+            'issue_date': forms.DateInput(attrs={'type': 'date'}),
+            'sale_date': forms.DateInput(attrs={'type': 'date'}),
+            'payment_method': forms.Select(),
+            'due_date': forms.DateInput(attrs={'type': 'date'}),
+            'bank_account': forms.TextInput(attrs={'class': 'custom-input', 'placeholder': 'Podaj numer bankowy'}),
+        }
 
     # show only clients assigned to the user
     def __init__(self, *args, assignedTo=None, **kwargs):

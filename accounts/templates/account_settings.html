@@ -9,7 +9,41 @@
 {% block content %}
 <form method="post" class="form-container">
     {% csrf_token %}
-    {{ form.as_p }}
+    <div class="form-group">
+        <label for="{{ form.nip_number.id_for_label }}">{{ form.nip_number.label }}</label>
+        {{ form.nip_number }}
+    </div>
+
+    <div class="form-group">
+        <label for="{{ form.regon_number.id_for_label }}">{{ form.regon_number.label }}</label>
+        {{ form.regon_number }}
+    </div>
+
+    <div class="form-group">
+        <label for="{{ form.bank_account_number.id_for_label }}">{{ form.bank_account_number.label }}</label>
+        {{ form.bank_account_number }}
+    </div>
+
+    <div class="form-group">
+        <label for="{{ form.year.id_for_label }}">{{ form.year.label }}</label>
+        {{ form.year }}
+    </div>
+    <div class="form-group">
+        <label for="{{ form.street.id_for_label }}">{{ form.street.label }}</label>
+        {{ form.street }}
+    </div>
+    <div class="form-group">
+        <label for="{{ form.city.id_for_label }}">{{ form.city.label }}</label>
+        {{ form.city }}
+    </div>
+    <div class="form-group">
+        <label for="{{ form.postal_code.id_for_label }}">{{ form.postal_code.label }}</label>
+        {{ form.postal_code }}
+    </div>
+    <div class="form-group">
+        <label for="{{ form.country.id_for_label }}">{{ form.country.label }}</label>
+        {{ form.country }}
+    </div>
 
     <button type="submit" class="btn btn-primary">Zapisz dane</button>
 </form>
