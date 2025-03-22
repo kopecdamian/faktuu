@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,66 +8,71 @@
   {% load static %}
   <link rel="stylesheet" href="{% static 'invoices/styles.css' %}">
 </head>
+
 <body>
-    <div class="container">
-      <div class="sidebar">
-          <a href="{% url 'home' %}" class="app-name">Faktuu</a>
-            <ul>
-              <li><a href="{% url 'invoices:invoices' %}" class="link">Faktury</a></li>
-              <li><a href="{% url 'invoices:clients' %}" class="link">Klienci</a></li>
-              <li><a href="{% url 'invoices:products' %}" class="link">Produkty</a></li>
-            </ul>
-        </div>
-        <div class="content">
-          <div class="topbar">
-            <span class="username" id="userMenuToggle">{{ user.username }}</span>
-              <ul class="dropdown-menu" id="dropdownMenu">
-                    <li>
-                      <form id="logoutForm" action="{% url 'accountSettings' %}">
-                        {% csrf_token %}
-                        <button type="submit" class="logout-button">Moje konto</button>
-                      </form>
-                    </li>
-                    <li>
-                      <form action="{% url 'password_change' %}" method="post">
-                        {% csrf_token %}
-                        <button type="submit" class="logout-button">Zmień hasło</button>
-                      </form>
-                    </li>
-                    <li>
-                      <form id="logoutForm" action="{% url 'logout' %}" method="post">
-                        {% csrf_token %}
-                        <button type="submit" class="logout-button">Wyloguj</button>
-                      </form>
-                    </li>
-                </ul>
-            </div>
-            <div class="header">
-                <h1>{% block titlePage %}Strona{% endblock %}</h1>
-                {% block button %}{% endblock %}
-            </div>
-            {% block content %}{% endblock %}
-        </div.navabr>
+  <div class="container">
+    <div class="sidebar">
+      <a href="{% url 'home' %}" class="app-name">Faktuu</a>
+      <ul>
+        <li><a href="{% url 'invoices:invoices' %}" class="link">Faktury</a></li>
+        <li><a href="{% url 'invoices:clients' %}" class="link">Klienci</a></li>
+        <li><a href="{% url 'invoices:products' %}" class="link">Produkty</a></li>
+      </ul>
+    </div>
+    <div class="page">
+      <div class="topbar">
+        <span class="username" id="userMenuToggle">{{ user.username }}</span>
+        <ul class="dropdown-menu" id="dropdownMenu">
+          <li>
+            <form id="logoutForm" action="{% url 'accountSettings' %}">
+              {% csrf_token %}
+              <button type="submit" class="logout-button">Moje konto</button>
+            </form>
+          </li>
+          <li>
+            <form action="{% url 'password_change' %}" method="post">
+              {% csrf_token %}
+              <button type="submit" class="logout-button">Zmień hasło</button>
+            </form>
+          </li>
+          <li>
+            <form id="logoutForm" action="{% url 'logout' %}" method="post">
+              {% csrf_token %}
+              <button type="submit" class="logout-button">Wyloguj</button>
+            </form>
+          </li>
+        </ul>
+      </div>
+      <div class="header">
+        <h1>{% block titlePage %}Strona{% endblock %}</h1>
+        {% block button %}{% endblock %}
+      </div>
+      <div class="content">
+        {% block content %}{% endblock %}
+      </div>
+
+      </div.navabr>
     </div>
     <script>
-        document.getElementById("userMenuToggle").addEventListener("click", function(event) {
-          event.stopPropagation();
-          var menu = document.getElementById("dropdownMenu");
-          if (menu.style.display === "block") {
-            menu.style.display = "none";
-          } else {
-            menu.style.display = "block";
-          }
-        });
-        
-        document.addEventListener("click", function(event) {
-          var menu = document.getElementById("dropdownMenu");
-          var toggle = document.getElementById("userMenuToggle");
-          if (!toggle.contains(event.target) && !menu.contains(event.target)) {
-            menu.style.display = "none";
-          }
-        });
-      </script>
-      {% block script %}{% endblock %}
+      document.getElementById("userMenuToggle").addEventListener("click", function (event) {
+        event.stopPropagation();
+        var menu = document.getElementById("dropdownMenu");
+        if (menu.style.display === "block") {
+          menu.style.display = "none";
+        } else {
+          menu.style.display = "block";
+        }
+      });
+
+      document.addEventListener("click", function (event) {
+        var menu = document.getElementById("dropdownMenu");
+        var toggle = document.getElementById("userMenuToggle");
+        if (!toggle.contains(event.target) && !menu.contains(event.target)) {
+          menu.style.display = "none";
+        }
+      });
+    </script>
+    {% block script %}{% endblock %}
 </body>
+
 </html>

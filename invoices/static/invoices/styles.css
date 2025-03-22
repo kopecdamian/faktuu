@@ -28,10 +28,19 @@ body {
     text-decoration: none;
 }
 
-.content {
+.page {
+    /* border: 1px solid red; */
     width: 100%;
     height: 100%;
     text-align: center;
+    display: flex;
+    flex-direction: column;
+}
+
+.content {
+    /* border: 1px solid blue; */
+    overflow-y: auto; 
+    /* height: 100%; */
 }
 
 .container2 {
@@ -43,8 +52,9 @@ body {
 .sidebar {
     width: 300px; 
     height: 100%; 
-    background-color: #333; 
+    background-color: #fff; 
     padding-top: 10px; 
+    border-right: 1px solid black;
 }
 
 .sidebar ul {
@@ -52,23 +62,19 @@ body {
     padding: 0;
 }
 
-.sidebar ul li {
-    margin-bottom: 20px; 
-}
-
 .sidebar ul li a {
-    color: white; 
+    color: black; 
     text-decoration: none; 
     font-size: 18px; 
     display: block; 
     padding: 10px;
-    background-color: #444; 
+    background-color: #fff; 
     border-radius: 5px; 
     transition: background-color 0.3s ease; 
 }
 
 .sidebar ul li a:hover {
-    background-color: #555; 
+    background-color: rgb(255, 216, 41); 
 }
 
 .header {
@@ -90,8 +96,12 @@ body {
 }
 
 .bottombar {
-    width: 100%;
-    padding: 5px 10px;
+    width: calc(100% - 250px);
+    bottom: 0;
+    display: flex;
+    justify-content:space-around ;
+    position: fixed;
+    padding: 0px 5px;
     /* height: 30px; */
     background-color: white;
 }
