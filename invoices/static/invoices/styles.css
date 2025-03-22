@@ -292,6 +292,43 @@ button.btn-secondary:hover {
     cursor: pointer;
 }
 
+/* Dropdown Products */
+
+.product-entry {
+    position: relative; /* Aby .dropdown-products było względem tego elementu */
+      display: inline-block;
+}
+
+.dropdown-products {
+    display: none; 
+    background: #fff;
+    padding: 10px;
+    border: 1px solid #ccc;
+    position: absolute; 
+    top: 50px;
+    min-width: 150px;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    z-index: 1000;
+}
+
+.dropdown-products li {
+    display: flex;
+    justify-content: space-between;
+    padding: 5px;
+    border-bottom: 1px solid #ddd;
+}
+
+.dropdown-products li button {
+    background: red;
+    color: white;
+    border: none;
+    padding: 2px 5px;
+    cursor: pointer;
+}
+
 /* Dropdown Menu */
   
 .dropdown-menu {

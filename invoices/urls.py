@@ -38,4 +38,6 @@ urlpatterns = [
     path("products/<int:product_id>/delete", views.productDelete, name="productDelete"),
     # /invoices/products/filter-products
     path("products/filter-products/", views.filterProducts, name="filterProducts"),
+    # /invoices/products/get-products
+    path("products/get-products/", views.getProducts, name="getProducts"),
 ]
