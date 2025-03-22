@@ -23,6 +23,8 @@ def invoices(request):
 # Create invoice
 @login_required()
 def invoiceCreate(request):
+    createdProducts = Product.objects.filter(assigned_to=request.user)
+    print(createdProducts)
     if request.method == "POST":
         form = InvoiceForm(request.POST, assignedTo=request.user)
         if form.is_valid():
@@ -48,7 +50,7 @@ def invoiceCreate(request):
         return HttpResponseRedirect(reverse("invoices:invoices"))
     else:
         form = InvoiceForm(assignedTo=request.user)
-    return render(request, "invoices/invoiceForm.html", {"form": form})
+    return render(request, "invoices/invoiceForm.html", {"form": form, "createdProducts": createdProducts})
 
 
 # Detail
@@ -56,6 +58,8 @@ def invoiceCreate(request):
 def invoiceDetail(request, invoice_id):
     # get invoice data
     invoice = get_object_or_404(Invoice, pk=invoice_id)
+    createdProducts = Product.objects.filter(assigned_to=request.user)
+    print(createdProducts)
     if invoice.assigned_to != request.user:
         return HttpResponseRedirect(reverse("invoices:invoices"))
     else:
@@ -108,7 +112,7 @@ def invoiceDetail(request, invoice_id):
         # show invoice data
         else:
             form = InvoiceForm(instance=invoice, assignedTo=request.user)
-        return render(request, "invoices/invoiceForm.html", {"form": form, "products":products, "invoice":invoice})
+        return render(request, "invoices/invoiceForm.html", {"form": form, "products":products, "invoice":invoice, "createdProducts": createdProducts})
 
 # Delete Invoice
 @login_required()
@@ -313,3 +317,10 @@ def filterProducts(request):
     product_data = list(products.values("id", "name", "price_netto"))
     
     return JsonResponse({"products": product_data})
+
+# Get Products
+@login_required()
+def getProducts(request):
+    products = list(Product.objects.filter(assigned_to=request.user).values("id", "name", "price_netto", "tax"))
+    print(products)
+    return JsonResponse({"products": products})

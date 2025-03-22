@@ -87,6 +87,18 @@ Dodaj Fakturę Sprzedazy
 
             <button id="remove-product-{{ forloop.counter0 }}" type="button" class="btn btn-primary">Usuń
                 produkt</button>
+            <button id="add-exist-product-{{ forloop.counter0 }}" type="button" class="btn btn-primary">Dodaj</button>
+            {% with outer_loop_counter=forloop.counter0 %}
+            <ul class="dropdown-products" id="dropdownProducts">
+                {% for createdProduct in createdProducts %}
+                <li>
+                    <button class="delete-btn" data-product-index={{ forloop.counter0 }} data-index={{ outer_loop_counter }}>{{ createdProduct.name }}</button>
+                    
+                </li>
+                {% endfor %}
+
+            </ul>
+            {% endwith %}
         </div>
         {% empty %}
 
@@ -101,10 +113,23 @@ Dodaj Fakturę Sprzedazy
     <p>VAT: <span id="totalVat">0.00</span> PLN</p>
     <p>Suma: <span id="totalBrutto">0.00</span> PLN</p>
 </div>
+
 {% endblock %}
 
 {% block script %}
 <script>
+    //get list user products
+    userProducts = {}
+
+    document.addEventListener("DOMContentLoaded", function () {
+        fetch("/invoices/products/get-products/")
+            .then(response => response.json())
+            .then(data => {
+                userProducts = data.products;
+            })
+            .catch(error => console.error("Błąd pobierania danych:", error));
+    });
+    
     let maxIndex = 0;
     // get highest product index
     let elements = document.querySelectorAll("[data-index]");
@@ -160,6 +185,14 @@ Dodaj Fakturę Sprzedazy
         let newProduct = document.createElement("div");
         newProduct.classList.add("product-item");
 
+        let dropdownHTML = '';
+        userProducts.forEach((product, index) => {
+            console.log(maxIndex)
+            dropdownHTML += `<li>
+                <button class="delete-btn" data-product-index=${index} data-index=${maxIndex}>${product.name}</button>
+            </li>`;
+        });
+
         newProduct.innerHTML = `
             <div class="product-entry" data-index="${maxIndex}">
                 <input type="hidden" name="productId[]" value="">
@@ -183,6 +216,10 @@ Dodaj Fakturę Sprzedazy
                 <input type="number" class="productPrice" name="productPrice[]" placeholder="Cena" value=0>
 
                 <button id="remove-product-${maxIndex}" type="button" class="btn btn-primary">Usuń produkt</button>
+                <button id="add-exist-product-${maxIndex}" type="button" class="btn btn-primary">Dodaj</button>
+                <ul class="dropdown-products" id="dropdownProducts">
+                    ${dropdownHTML}
+                </ul>
             </div>
             `;
 
@@ -200,6 +237,46 @@ Dodaj Fakturę Sprzedazy
             }
         }
     });
+
+    // fill product inputs
+    document.getElementById("product-container").addEventListener("click", function (event) {
+        event.preventDefault();
+        if (event.target && event.target.classList.contains('delete-btn')) {
+            let productIndex = event.target.dataset.productIndex;
+            let maxIndex = event.target.dataset.index;
+            console.log(productIndex, maxIndex)
+
+            let productEntry = document.querySelector(`.product-entry[data-index='${maxIndex}']`);
+            if (productEntry) {
+                let nameInput = productEntry.querySelector("input[name='productName[]']");
+                let taxSelect = productEntry.querySelector("select[name='productTax[]']");
+                // let quantityInput = productEntry.querySelector("input[name='productQuantity[]']");
+                let priceInput = productEntry.querySelector("input[name='productPrice[]']");
+                
+                nameInput.value = userProducts[productIndex].name;
+                taxSelect.value = userProducts[productIndex].tax;
+                priceInput.value = userProducts[productIndex].price_netto;
+        }
+    }
+    })
+
+    // show/hide dropdown menu
+    document.getElementById("product-container").addEventListener("click", function (event) {
+        event.preventDefault();
+        if (event.target) {
+            let productId = event.target.id.replace("add-exist-product-", "");
+            let productEntry = document.querySelector(`.product-entry[data-index='${productId}']`);
+
+            if (productEntry) {
+                let dropdownMenu = productEntry.querySelector("ul[id='dropdownProducts']");
+                if (dropdownMenu.style.display === "block") {
+                    dropdownMenu.style.display = "none";
+                    } else {
+                        dropdownMenu.style.display = "block";
+                    }
+            }
+        }
+    })
 
     // Event delegation
     document.getElementById("product-container").addEventListener("input", function (event) {
