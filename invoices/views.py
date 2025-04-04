@@ -137,7 +137,7 @@ def generateInvoicePdf(request, invoice_id):
 
         # get html template
         template_path = "pdf/invoicePdf.html"
-        context = {"invoice": invoice, "products": products}
+        context = {"invoice": invoice, "products": products, "user": request.user}
         template = get_template(template_path)
         html = template.render(context)
 

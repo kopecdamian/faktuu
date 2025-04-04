@@ -3,6 +3,7 @@ from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.core.validators import RegexValidator
 
+# new user model based on basic user model
 class CustomUser(AbstractUser):
     nip_number = models.IntegerField(validators=[MinValueValidator(1000000000), MaxValueValidator(9999999999)], blank=True, null=True)
     regon_number = models.IntegerField(validators=[MinValueValidator(100000000), MaxValueValidator(999999999)], blank=True, null=True)

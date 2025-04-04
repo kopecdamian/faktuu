@@ -18,6 +18,10 @@ Dodaj Fakturę Sprzedazy
 
 {% block button %}
 {% if invoice.id %}
+<form method="post" action="{% url 'invoices:generateInvoicePdf' invoice.id %}">
+    {% csrf_token %}
+    <button class="btn btn-primary" type="submit">Wygeneruj PDF</button>
+</form>
 <form method="post" action="{% url 'invoices:invoiceDelete' invoice.id %}">
     {% csrf_token %}
     <button class="btn btn-primary" type="submit">Usuń fakturę</button>
