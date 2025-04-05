@@ -38,3 +38,44 @@
         <a href="{% url 'invoices:products' %}" class="btn btn-secondary">Powrót do listy</a>
     </form>
 {% endblock %}
+
+{% block script %}
+<script>
+    const nettoInput = document.getElementById("{{ form.price_netto.auto_id }}");
+    const bruttoInput = document.getElementById("{{ form.price_brutto.auto_id }}");
+    const taxInput = document.getElementById("{{ form.tax.auto_id }}");
+
+    const convertNettoToBrutto = () => {
+        const netto = parseFloat(nettoInput.value);
+        const vat = taxInput.value;
+        if (!isNaN(netto)) {
+            bruttoInput.value = ((netto * 1) + (netto * vat / 100)).toFixed(2);
+        } else {
+            bruttoInput.value = "";
+        }
+    }
+
+    const convertBruttoToNetto = () => {
+        const brutto = parseFloat(bruttoInput.value);
+        const vat = taxInput.value;
+        if (!isNaN(brutto)) {
+            nettoInput.value = ((brutto * 1) - (brutto * vat / 100)).toFixed(2);
+        } else {
+            nettoInput.value = "";
+        }
+    }
+
+    nettoInput.addEventListener("input", () => {
+        convertNettoToBrutto();
+    });
+
+    bruttoInput.addEventListener("input", () => {
+        convertBruttoToNetto();
+    });
+
+    taxInput.addEventListener("change", () => {
+        convertNettoToBrutto();
+    });
+
+</script>
+{% endblock %}

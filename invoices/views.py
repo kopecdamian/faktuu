@@ -245,6 +245,15 @@ def filterClients(request):
     
     return JsonResponse({"clients": client_data})
 
+# Get one Client
+@login_required()
+def getClient(request, client_id):
+    client = list(Client.objects.filter(
+            Q(assigned_to=request.user) & Q(id__icontains=client_id)
+        ).values("id", "name", "nip_number", "street", "city", "postal_code"))
+    print(client)
+    return JsonResponse({"client": client})
+
 # Products
 @login_required()
 def products(request):

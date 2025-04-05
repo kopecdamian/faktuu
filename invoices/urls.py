@@ -4,29 +4,31 @@ from . import views
 
 app_name = "invoices"
 urlpatterns = [
-    # /invoices
+    # All invoices
     path("", views.invoices, name="invoices"),
-    # /invoices/create
+    # Create invoice
     path("create", views.invoiceCreate, name="invoiceCreate"),
-    # /invoices/5
+    # Show invoice
     path("<int:invoice_id>/", views.invoiceDetail, name="invoiceDetail"),
-     # /invoices/invoices/5/delete
+     # Delete invoice
     path("invoices/<int:invoice_id>/delete", views.invoiceDelete, name="invoiceDelete"),
-    # /invoices/5/pdf
+    # Create PDf from invoice
     path("<int:invoice_id>/pdf/", views.generateInvoicePdf, name="generateInvoicePdf"),
-    # /invoices/filter-invoices
+    # Filter invoices
     path("filter-invoices/", views.filterInvoices, name="filterInvoices"),
 
-    # /invoices/clients
+    # Show all clients
     path("clients", views.clients, name="clients"),
-    # /invoices/clients/create
+    # Create client
     path("clients/create", views.clientForm, name="clientForm"),
-    # /invoice/clients/5
+    # Show client
     path("clients/<int:client_id>/", views.clientDetail, name="clientDetail"),
-    # /invoice/clients/5/delete
+    # Delete client
     path("clients/<int:client_id>/delete", views.clientDelete, name="clientDelete"),
-    # /invoices/clients/filter-clients
+    # Filter clients
     path("clients/filter-clients/", views.filterClients, name="filterClients"),
+     # Get one invoice
+    path("clients/get-client/<int:client_id>/", views.getClient, name="getClient"),
 
     # /invoices/products
     path("products", views.products, name="products"),
