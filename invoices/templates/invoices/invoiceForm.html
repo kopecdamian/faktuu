@@ -18,10 +18,13 @@ Dodaj Fakturę Sprzedazy
 
 {% block button %}
 {% if invoice.id %}
+<<<<<<< HEAD
 <form method="post" action="{% url 'invoices:generateInvoicePdf' invoice.id %}">
     {% csrf_token %}
     <button class="btn btn-primary" type="submit">Wygeneruj PDF</button>
 </form>
+=======
+>>>>>>> 1012754562ee1bbded85f416f959655da14cf9f1
 <form method="post" action="{% url 'invoices:invoiceDelete' invoice.id %}">
     {% csrf_token %}
     <button class="btn btn-primary" type="submit">Usuń fakturę</button>
@@ -39,6 +42,7 @@ Dodaj Fakturę Sprzedazy
         <label for="{{ form.client.id_for_label }}">{{ form.client.label }}</label>
         {{ form.client }}
     </div>
+<<<<<<< HEAD
     <div class="form-group">
         <label>Numer NIP:</label>
         <p id="client-nip"></p>
@@ -48,6 +52,8 @@ Dodaj Fakturę Sprzedazy
         <p id="client-street"></p>
         <p id="client-city"></p>
     </div>
+=======
+>>>>>>> 1012754562ee1bbded85f416f959655da14cf9f1
 
     <div class="form-group">
         <label for="{{ form.issue_date.id_for_label }}">{{ form.issue_date.label }}</label>
@@ -134,9 +140,12 @@ Dodaj Fakturę Sprzedazy
     //get list user products
     userProducts = {}
 
+<<<<<<< HEAD
     //get client data
     clientData = {}
 
+=======
+>>>>>>> 1012754562ee1bbded85f416f959655da14cf9f1
     document.addEventListener("DOMContentLoaded", function () {
         fetch("/invoices/products/get-products/")
             .then(response => response.json())
@@ -156,6 +165,7 @@ Dodaj Fakturę Sprzedazy
         }
     });
 
+<<<<<<< HEAD
     // get data for choose client
     const clientSelect = document.getElementById("{{ form.client.auto_id }}");
 
@@ -174,6 +184,8 @@ Dodaj Fakturę Sprzedazy
             .catch(error => console.error("Błąd pobierania danych:", error));
     });
 
+=======
+>>>>>>> 1012754562ee1bbded85f416f959655da14cf9f1
     // calculate sum of price of all products
     function calculateTotal() {
         let totalNetto = 0;

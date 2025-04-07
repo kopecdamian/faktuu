@@ -1,12 +1,17 @@
 {% extends "base.html" %}
 
+<<<<<<< HEAD
 {% block title %}Rejestracja{% endblock %}
+=======
+{% block title %}rejestracja{% endblock %}
+>>>>>>> 1012754562ee1bbded85f416f959655da14cf9f1
 
 {% block navbar %}
     <a href="{% url 'login' %}" class="button">Zaloguj</a>
 {% endblock %}
 
 {% block content %}
+<<<<<<< HEAD
 <div class="container">
   <h2>Rejestracja</h2>
   <form method="post">
@@ -38,4 +43,12 @@
   <button type="submit" class="button">Zarejestruj </button>
   </form>
 </div>
+=======
+<h2>Rejestracja</h2>
+<form method="post">
+  {% csrf_token %}
+  {{ form }}
+  <button type="submit">Zarejestruj</button>
+</form>
+>>>>>>> 1012754562ee1bbded85f416f959655da14cf9f1
 {% endblock %}

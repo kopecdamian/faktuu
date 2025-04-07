@@ -4,6 +4,7 @@ from .models import Product, Client, Invoice, InvoiceProduct
 
 class ProductForm(forms.ModelForm):
     class Meta:
+<<<<<<< HEAD
         VALUE_TAX = [
             (23, 23),
             (8, 8),
@@ -19,11 +20,24 @@ class ProductForm(forms.ModelForm):
             "price_netto": "Cena Netto *",
             "tax": "Podatek VAT *",
             "price_brutto": "Cena Brutto *",
+=======
+        model = Product
+        fields = ['name', 'price_netto', 'tax', 'price_brutto']
+        labels = {
+            "name":  "Nazwa",
+            "price_netto": "Cena Netto",
+            "tax": "Podatek VAT",
+            "price_brutto": "Cena Brutto",
+>>>>>>> 1012754562ee1bbded85f416f959655da14cf9f1
         }
         widgets = {
             'name': forms.TextInput(attrs={'class': 'custom-input', 'placeholder': 'Podaj nazwę produktu'}),
             'price_netto': forms.TextInput(attrs={'class': 'custom-input', 'placeholder': 'Cena netto'}),
+<<<<<<< HEAD
             'tax': forms.Select(attrs={'class': 'form-control'}),
+=======
+            'tax': forms.TextInput(attrs={'class': 'custom-input', 'placeholder': 'Podatek VAT'}),
+>>>>>>> 1012754562ee1bbded85f416f959655da14cf9f1
             'price_brutto': forms.TextInput(attrs={'class': 'custom-input', 'placeholder': 'Cena brutto'}),
         }
 
@@ -32,8 +46,13 @@ class ClientForm(forms.ModelForm):
         model = Client
         fields = ['name', 'nip_number', 'street', 'city', 'postal_code', 'country', 'phone_number', 'email']
         labels = {
+<<<<<<< HEAD
             "name":  "Nazwa *",
             "nip_number": "Numer NIP *",
+=======
+            "name":  "Nazwa",
+            "nip_number": "Numer NIP",
+>>>>>>> 1012754562ee1bbded85f416f959655da14cf9f1
             "street": "Ulica",
             "city": "Miasto",
             "postal_code": "Kod Pocztowy",

@@ -33,4 +33,8 @@ class CustomUserForm(forms.ModelForm):
             'city': forms.TextInput(attrs={'class': 'custom-input', 'placeholder': 'Podaj numer bankowy'}),
             'postal_code': forms.TextInput(attrs={'class': 'custom-input', 'placeholder': 'Podaj numer bankowy'}),
             'country': forms.TextInput(attrs={'class': 'custom-input', 'placeholder': 'Podaj numer bankowy'}),
+<<<<<<< HEAD
         }
+=======
+        }
+>>>>>>> 1012754562ee1bbded85f416f959655da14cf9f1
