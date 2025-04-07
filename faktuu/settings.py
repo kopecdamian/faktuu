@@ -24,30 +24,17 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
-<<<<<<< HEAD
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure--hjvc5a^x8(vs=p*x(y286587#-5e+0za2cw(*qbb4!_oq=y#l'
 
-=======
->>>>>>> 1012754562ee1bbded85f416f959655da14cf9f1
 # Get data from file .env
 env = environ.Env()
 environ.Env.read_env(os.path.join(BASE_DIR, ".env"))
 
-<<<<<<< HEAD
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 ALLOWED_HOSTS = []
-=======
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = env("DJANGO_SECRET_KEY")
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
-
-ALLOWED_HOSTS = env("ALLOWED_HOSTS").split(',')
->>>>>>> 1012754562ee1bbded85f416f959655da14cf9f1
 
 
 # Application definition
@@ -140,11 +127,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-<<<<<<< HEAD
 STATIC_URL = 'static/'
-=======
-STATIC_URL = '/static/'
->>>>>>> 1012754562ee1bbded85f416f959655da14cf9f1
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
@@ -165,8 +148,3 @@ EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD")
 DEFAULT_FROM_EMAIL = env("EMAIL_HOST_USER")
 
 AUTH_USER_MODEL = 'accounts.CustomUser'
-<<<<<<< HEAD
-=======
-
-STATIC_ROOT = '/var/www/faktuu/static'
->>>>>>> 1012754562ee1bbded85f416f959655da14cf9f1

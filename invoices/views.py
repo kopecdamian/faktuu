@@ -137,11 +137,7 @@ def generateInvoicePdf(request, invoice_id):
 
         # get html template
         template_path = "pdf/invoicePdf.html"
-<<<<<<< HEAD
         context = {"invoice": invoice, "products": products, "user": request.user}
-=======
-        context = {"invoice": invoice, "products": products}
->>>>>>> 1012754562ee1bbded85f416f959655da14cf9f1
         template = get_template(template_path)
         html = template.render(context)
 
@@ -249,7 +245,6 @@ def filterClients(request):
     
     return JsonResponse({"clients": client_data})
 
-<<<<<<< HEAD
 # Get one Client
 @login_required()
 def getClient(request, client_id):
@@ -259,8 +254,6 @@ def getClient(request, client_id):
     print(client)
     return JsonResponse({"client": client})
 
-=======
->>>>>>> 1012754562ee1bbded85f416f959655da14cf9f1
 # Products
 @login_required()
 def products(request):

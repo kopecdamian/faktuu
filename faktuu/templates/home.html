@@ -4,10 +4,7 @@
 
 {% block navbar %}
     {% if user.is_authenticated %}
-<<<<<<< HEAD
     <a href="{% url 'invoices:invoices' %}" class="button">Profil</a>
-=======
->>>>>>> 1012754562ee1bbded85f416f959655da14cf9f1
     <form action="{% url 'logout' %}" method="post">
     {% csrf_token %}
     <button type="submit" class="button">Wyloguj</button>

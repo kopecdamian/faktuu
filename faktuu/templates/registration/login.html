@@ -7,7 +7,6 @@
 {% endblock %}
 
 {% block content %}
-<<<<<<< HEAD
 <div class="container">
   <h2>Logowanie</h2>
   <form method="post">
@@ -33,13 +32,4 @@
   </form>
 </div>
 
-=======
-<h2>Zaloguj się</h2>
-<form method="post">
-  {% csrf_token %}
-  {{ form }}
-  <a href="{% url 'password_reset' %}" class="link">Resetuj hasło</a>
-  <button type="submit" class="button">Zaloguj</button>
-</form>
->>>>>>> 1012754562ee1bbded85f416f959655da14cf9f1
 {% endblock %}
