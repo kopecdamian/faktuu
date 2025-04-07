@@ -24,12 +24,12 @@ class Client(models.Model):
 # Table: Products
 class Product(models.Model):
     VALUE_TAX = [
-        (23, 23),
-        (8, 8),
-        (7, 7),
-        (5, 5),
-        (4, 4),
-        (0, 0),
+        (23, '23%'),
+        (8, '8%'),
+        (7, '7%'),
+        (5, '5%'),
+        (4, '4%'),
+        (0, '0%'),
     ]
     name = models.CharField(max_length=255)
     price_netto = models.DecimalField(max_digits=10, decimal_places=2)

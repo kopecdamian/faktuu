@@ -18,6 +18,10 @@ Dodaj Fakturę Sprzedazy
 
 {% block button %}
 {% if invoice.id %}
+<form method="post" action="{% url 'invoices:generateInvoicePdf' invoice.id %}">
+    {% csrf_token %}
+    <button class="btn btn-primary" type="submit">Wygeneruj PDF</button>
+</form>
 <form method="post" action="{% url 'invoices:invoiceDelete' invoice.id %}">
     {% csrf_token %}
     <button class="btn btn-primary" type="submit">Usuń fakturę</button>
@@ -34,6 +38,15 @@ Dodaj Fakturę Sprzedazy
     <div class="form-group">
         <label for="{{ form.client.id_for_label }}">{{ form.client.label }}</label>
         {{ form.client }}
+    </div>
+    <div class="form-group">
+        <label>Numer NIP:</label>
+        <p id="client-nip"></p>
+    </div>
+    <div class="form-group">
+        <label>Adres:</label>
+        <p id="client-street"></p>
+        <p id="client-city"></p>
     </div>
 
     <div class="form-group">
@@ -121,6 +134,9 @@ Dodaj Fakturę Sprzedazy
     //get list user products
     userProducts = {}
 
+    //get client data
+    clientData = {}
+
     document.addEventListener("DOMContentLoaded", function () {
         fetch("/invoices/products/get-products/")
             .then(response => response.json())
@@ -138,6 +154,24 @@ Dodaj Fakturę Sprzedazy
         if (index > maxIndex) {
             maxIndex = index;
         }
+    });
+
+    // get data for choose client
+    const clientSelect = document.getElementById("{{ form.client.auto_id }}");
+
+    clientSelect.addEventListener("change", () => {
+        const clientId = clientSelect.value;
+
+        fetch(`/invoices/clients/get-client/${clientId}/`)
+            .then(response => response.json())
+            .then(data => {
+                clientData = data.client;
+                console.log(clientData)
+                document.getElementById('client-nip').innerText = clientData[0].nip_number;
+                document.getElementById('client-street').innerText = clientData[0].street;
+                document.getElementById('client-city').innerText = `${clientData[0].postal_code} ${clientData[0].city}`;
+            })
+            .catch(error => console.error("Błąd pobierania danych:", error));
     });
 
     // calculate sum of price of all products

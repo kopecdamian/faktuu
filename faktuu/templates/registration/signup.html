@@ -1,16 +1,41 @@
 {% extends "base.html" %}
 
-{% block title %}rejestracja{% endblock %}
+{% block title %}Rejestracja{% endblock %}
 
 {% block navbar %}
     <a href="{% url 'login' %}" class="button">Zaloguj</a>
 {% endblock %}
 
 {% block content %}
-<h2>Rejestracja</h2>
-<form method="post">
-  {% csrf_token %}
-  {{ form }}
-  <button type="submit">Zarejestruj</button>
-</form>
+<div class="container">
+  <h2>Rejestracja</h2>
+  <form method="post">
+    {% csrf_token %}
+    <div class="form-group">
+      {{ form.username.errors }}
+      <label for="username">Nazwa użytkownika</label>
+      {{ form.username }}
+  </div>
+
+  <div class="form-group">
+      {{ form.email.errors }}
+      <label for="email">Email</label>
+      {{ form.email }}
+  </div>
+
+  <div class="form-group">
+      {{ form.password1.errors }}
+      <label for="password">Hasło</label>
+      {{ form.password1 }}
+  </div>
+
+  <div class="form-group">
+      {{ form.password2.errors }}
+      <label for="password2">Potwierdź hasło</label>
+      {{ form.password2 }}
+  </div>
+
+  <button type="submit" class="button">Zarejestruj </button>
+  </form>
+</div>
 {% endblock %}
