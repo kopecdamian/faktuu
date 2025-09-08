@@ -41,12 +41,12 @@ Dodaj Fakturę Sprzedazy
     </div>
     <div class="form-group">
         <label>Numer NIP:</label>
-        <p id="client-nip"></p>
+        <p id="client-nip">{{ invoice.client.nip_number }}</p>
     </div>
     <div class="form-group">
         <label>Adres:</label>
-        <p id="client-street"></p>
-        <p id="client-city"></p>
+        <p id="client-street">{{ invoice.client.street }}</p>
+        <p id="client-city">{{ invoice.client.city }}</p>
     </div>
 
     <div class="form-group">
@@ -79,7 +79,7 @@ Dodaj Fakturę Sprzedazy
         <div class="product-entry" data-index="{{ forloop.counter0 }}">
             <input type="hidden" name="productId[]" value={{product.id}}>
             <label>Nazwa produktu:</label>
-            <input type="text" name="productName[]" placeholder="Nazwa" value={{product.name}}>
+            <input onfocus="showDropdownProducts('{{ forloop.counter0 }}')" onblur="closeDropdownProducts('{{ forloop.counter0 }}')" type="text" name="productName[]" placeholder="Nazwa" value={{product.name}}>
 
             <label>Ilość:</label>
             <input type="number" class="productQuantity" name="productQuantity[]" placeholder="Ilość"
@@ -100,13 +100,11 @@ Dodaj Fakturę Sprzedazy
 
             <button id="remove-product-{{ forloop.counter0 }}" type="button" class="btn btn-primary">Usuń
                 produkt</button>
-            <button id="add-exist-product-{{ forloop.counter0 }}" type="button" class="btn btn-primary">Dodaj</button>
             {% with outer_loop_counter=forloop.counter0 %}
-            <ul class="dropdown-products" id="dropdownProducts">
+            <ul class="dropdown-products" id="dropdownProducts-{{ forloop.counter0 }}">
                 {% for createdProduct in createdProducts %}
                 <li>
                     <button class="delete-btn" data-product-index={{ forloop.counter0 }} data-index={{ outer_loop_counter }}>{{ createdProduct.name }}</button>
-                    
                 </li>
                 {% endfor %}
 
@@ -231,10 +229,10 @@ Dodaj Fakturę Sprzedazy
             <div class="product-entry" data-index="${maxIndex}">
                 <input type="hidden" name="productId[]" value="">
                 <label>Nazwa produktu:</label>
-                <input type="text" name="productName[]"placeholder="Nazwa">
+                <input onfocus="showDropdownProducts(${maxIndex})" onblur="closeDropdownProducts(${maxIndex})" id="input-product-${maxIndex}" type="text" name="productName[]"placeholder="Nazwa">
 
                 <label>Ilość:</label>
-                <input type="number" class="productQuantity" name="productQuantity[]" placeholder="Ilość" value=0>
+                <input type="number" class="productQuantity" name="productQuantity[]" placeholder="Ilość" value=1>
 
                  <label>VAT:</label>
                     <select id="tax" class="productTax" name="productTax[]" placeholder="VAT" value=23>
@@ -250,8 +248,7 @@ Dodaj Fakturę Sprzedazy
                 <input type="number" class="productPrice" name="productPrice[]" placeholder="Cena" value=0>
 
                 <button id="remove-product-${maxIndex}" type="button" class="btn btn-primary">Usuń produkt</button>
-                <button id="add-exist-product-${maxIndex}" type="button" class="btn btn-primary">Dodaj</button>
-                <ul class="dropdown-products" id="dropdownProducts">
+                <ul class="dropdown-products" id="dropdownProducts-${maxIndex}">
                     ${dropdownHTML}
                 </ul>
             </div>
@@ -268,6 +265,8 @@ Dodaj Fakturę Sprzedazy
 
             if (productEntry) {
                 productEntry.remove();
+
+                calculateTotal();
             }
         }
     });
@@ -290,28 +289,23 @@ Dodaj Fakturę Sprzedazy
                 nameInput.value = userProducts[productIndex].name;
                 taxSelect.value = userProducts[productIndex].tax;
                 priceInput.value = userProducts[productIndex].price_netto;
+
+                calculateTotal();
         }
     }
     })
 
-    // show/hide dropdown menu
-    document.getElementById("product-container").addEventListener("click", function (event) {
-        event.preventDefault();
-        if (event.target) {
-            let productId = event.target.id.replace("add-exist-product-", "");
-            let productEntry = document.querySelector(`.product-entry[data-index='${productId}']`);
 
-            if (productEntry) {
-                let dropdownMenu = productEntry.querySelector("ul[id='dropdownProducts']");
-                if (dropdownMenu.style.display === "block") {
-                    dropdownMenu.style.display = "none";
-                    } else {
-                        dropdownMenu.style.display = "block";
-                    }
-            }
-        }
-    })
+    function showDropdownProducts(number) {
+        document.getElementById("dropdownProducts-" + number).style.display = "block"
+    }
 
+    function closeDropdownProducts(number) {
+        setTimeout(() => {
+        document.getElementById("dropdownProducts-" + number).style.display = "none"
+    }, 200);
+        
+    }
     // Event delegation
     document.getElementById("product-container").addEventListener("input", function (event) {
         if (event.target.classList.contains("productPrice") || event.target.classList.contains(
@@ -323,5 +317,6 @@ Dodaj Fakturę Sprzedazy
     document.querySelectorAll(".productPrice, .productQuantity, .productTax").forEach(item => {
         item.addEventListener("input", calculateTotal);
     })
+
 </script>
 {% endblock %}
