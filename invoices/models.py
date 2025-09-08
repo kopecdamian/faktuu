@@ -31,15 +31,61 @@ class Product(models.Model):
         (4, '4%'),
         (0, '0%'),
     ]
+    VALUE_TYPE = [
+        ('service', 'usługa'),
+        ('product', 'produkt')
+    ]
+    VALUE_CURR = [
+        ('PLN','PLN'),
+        ('EUR','EUR')
+    ]
     name = models.CharField(max_length=255)
-    price_netto = models.DecimalField(max_digits=10, decimal_places=2)
     tax = models.IntegerField(
         choices=VALUE_TAX,
         default=23
     )
+    measurement = models.CharField(max_length=20)
+    type = models.CharField(
+        max_length=255,
+        choices=VALUE_TYPE,
+        default='product'
+    )
+    price_netto = models.DecimalField(max_digits=10, decimal_places=2)
     price_brutto = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
+    currency = models.CharField(
+        max_length=3,
+        choices=VALUE_CURR,
+        default='PLN'
+    )
+    code = models.CharField(max_length=8, unique=True)
+    desc = models.CharField(max_length=255, blank=True, null=True)
     assigned_to = models.ForeignKey(customUser, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
+
+    def save(self, *args, user=None, **kwargs):
+        # if code is not defined
+        if not self.code: 
+            # checking if exist a code number for the user
+            try:
+                old_product_code = ProductCounter.objects.get(user=user).highest_number
+            # if not, create new invoice number for the user in database
+            except ProductCounter.DoesNotExist:
+                new_product_code = "P-000001"
+                ProductCounter.objects.create(
+                    user = user,
+                    highest_number = new_product_code
+                )
+            # if exist, generate a higher product number
+            else:
+                product_prefix, product_number = old_product_code.split("-")
+                new_code = int(product_number) + 1
+                new_product_code = f"P-{new_code:06d}" 
+            # save new product code in database
+            ProductCounter.objects.filter(user = user).update(highest_number=new_product_code)
+
+            self.code = new_product_code
+        super().save(*args, **kwargs)
+
     def __str__(self):
         return self.name
 
@@ -127,6 +173,13 @@ class InvoiceProduct(models.Model):
     
 # Table: Highest Invoice Number
 class InvoiceCounter(models.Model):
+    user = models.ForeignKey(customUser, on_delete=models.CASCADE)
+    highest_number = models.CharField(max_length=50)
+    def __str__(self):
+        return f"{self.user.username}: {self.highest_number}"
+    
+# Table: Highest Product Number
+class ProductCounter(models.Model):
     user = models.ForeignKey(customUser, on_delete=models.CASCADE)
     highest_number = models.CharField(max_length=50)
     def __str__(self):

@@ -405,3 +405,19 @@ button.btn-secondary:hover {
     border-color: rgb(255, 216, 41);
     outline: none;
 }
+
+.custom-select {
+  min-width: 350px;
+}
+
+.custom-select select {
+  appearance: none;
+  width: 100%;
+  font-size: 1.15rem;
+  padding: 0.675em 6em 0.675em 1em;
+  background-color: #fff;
+  border: 1px solid #caced1;
+  border-radius: 0.25rem;
+  color: #000;
+  cursor: pointer;
+}

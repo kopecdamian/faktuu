@@ -13,18 +13,28 @@ class ProductForm(forms.ModelForm):
             (0, 0),
         ]
         model = Product
-        fields = ['name', 'price_netto', 'tax', 'price_brutto']
+        fields = ['name', 'tax', 'measurement', 'type', 'price_netto', 'price_brutto', 'currency', 'desc']
         labels = {
             "name":  "Nazwa *",
-            "price_netto": "Cena Netto *",
             "tax": "Podatek VAT *",
+            'measurement': 'Jednostka miary *',
+            'type': 'Rodzaj *',
+            "price_netto": "Cena Netto *",
             "price_brutto": "Cena Brutto *",
+            'currency': 'Waluta *',
+            'code': 'Kod *',
+            'desc': 'Opis'
         }
         widgets = {
             'name': forms.TextInput(attrs={'class': 'custom-input', 'placeholder': 'Podaj nazwę produktu'}),
+            'tax': forms.Select(attrs={'class': 'custom-select'}),
+            'measurement': forms.TextInput(attrs={'class': 'custom-input', 'placeholder': 'Podaj rodzaj'}),
+            'type': forms.Select(attrs={'class': 'custom-select'}),
             'price_netto': forms.TextInput(attrs={'class': 'custom-input', 'placeholder': 'Cena netto'}),
-            'tax': forms.Select(attrs={'class': 'form-control'}),
             'price_brutto': forms.TextInput(attrs={'class': 'custom-input', 'placeholder': 'Cena brutto'}),
+            'currency': forms.Select(attrs={'class': 'custom-select'}),
+            'code': forms.TextInput(attrs={'class': 'custom-input', 'placeholder': 'Kod zostanie wygenerowany automatycznie po zapisaniu.'}),
+            'desc': forms.TextInput(attrs={'class': 'custom-input'}),
         }
 
 class ClientForm(forms.ModelForm):

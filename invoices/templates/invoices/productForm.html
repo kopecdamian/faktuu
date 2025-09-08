@@ -8,13 +8,16 @@
         <form method="post" class="form-container">
             {% csrf_token %}
             <div class="form-group">
+                <label for="">Kod</label>
+                {% if product.code %}
+                {{product.code}}
+                {% else %}
+                Kod zostanie wygenerowanie po zapisaniu.
+                {% endif %}
+            </div>
+            <div class="form-group">
                 <label for="{{ form.name.id_for_label }}">{{ form.name.label }}</label>
                 {{ form.name }}
-            </div>
-
-            <div class="form-group">
-                <label for="{{ form.price_netto.id_for_label }}">{{ form.price_netto.label }}</label>
-                {{ form.price_netto }}
             </div>
 
             <div class="form-group">
@@ -23,8 +26,33 @@
             </div>
 
             <div class="form-group">
+                <label for="{{ form.measurement.id_for_label }}">{{ form.measurement.label }}</label>
+                {{ form.measurement }}
+            </div>
+
+            <div class="form-group">
+                <label for="{{ form.type.id_for_label }}">{{ form.type.label }}</label>
+                {{ form.type }}
+            </div>
+
+            <div class="form-group">
+                <label for="{{ form.price_netto.id_for_label }}">{{ form.price_netto.label }}</label>
+                {{ form.price_netto }}
+            </div>
+
+            <div class="form-group">
                 <label for="{{ form.price_brutto.id_for_label }}">{{ form.price_brutto.label }}</label>
                 {{ form.price_brutto }}
+            </div>
+
+            <div class="form-group">
+                <label for="{{ form.currency.id_for_label }}">{{ form.currency.label }}</label>
+                {{ form.currency }}
+            </div>
+
+            <div class="form-group">
+                <label for="{{ form.desc.id_for_label }}">{{ form.desc.label }}</label>
+                {{ form.desc }}
             </div>
 
             <button type="submit" class="btn btn-primary">Zapisz produkt</button>

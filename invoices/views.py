@@ -33,7 +33,6 @@ def invoiceCreate(request):
             invoice.total_vat = request.POST.get('totalVat')
             invoice.total_brutto = request.POST.get('totalBrutto')
             invoice.assigned_to = request.user
-            print(request.user)
             invoice.save(user=request.user)
             productsName = request.POST.getlist("productName[]")
             productsPrice = request.POST.getlist("productPrice[]")
@@ -272,8 +271,9 @@ def productForm(request):
         if form.is_valid():
             product = form.save(commit=False)
             product.assigned_to = request.user
-            product = form.save()
-            form.save()
+            product.save(user=request.user)
+            # product = form.save(user=request.user)
+            # form.save()
             return HttpResponseRedirect(reverse("invoices:products"))
     else:
         form = ProductForm()
@@ -294,7 +294,7 @@ def productDetail(request, product_id):
                 return HttpResponseRedirect(reverse("invoices:products"))
         else:
             form = ProductForm(instance=product)
-        return render(request, "invoices/productDetail.html", {"form": form, "product":product})
+        return render(request, "invoices/productForm.html", {"form": form, "product":product})
 
 # Delete Product
 @login_required()
